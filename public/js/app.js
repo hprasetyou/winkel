@@ -1770,7 +1770,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    console.log(this.$route);
+  },
   props: {
     headers: {
       type: Array
@@ -1810,6 +1812,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    gotoDetail: function gotoDetail(id) {
+      this.$router.push("".concat(this.$route.path, "/").concat(id));
+    },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
 
@@ -3004,7 +3009,11 @@ var render = function() {
         [
           _c("v-spacer"),
           _vm._v(" "),
-          _c("v-btn", { attrs: { color: "primary" } }, [_vm._v("New")])
+          _c(
+            "v-btn",
+            { attrs: { color: "primary", to: this.$route.path + "/new" } },
+            [_vm._v("New")]
+          )
         ],
         1
       ),
@@ -3051,9 +3060,20 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _vm._l(_vm.headers, function(header, i) {
-                  return _c("td", { key: i }, [
-                    _vm._v(_vm._s(props.item[header.value]))
-                  ])
+                  return _c(
+                    "td",
+                    {
+                      key: i,
+                      on: {
+                        click: function($event) {
+                          $event.stopPropagation()
+                          $event.preventDefault()
+                          return _vm.gotoDetail(props.item.id)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(props.item[header.value]))]
+                  )
                 })
               ]
             }

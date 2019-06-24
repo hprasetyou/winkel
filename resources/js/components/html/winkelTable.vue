@@ -2,7 +2,7 @@
     <div>
         <v-layout row>
             <v-spacer></v-spacer>
-            <v-btn color="primary">New</v-btn>
+            <v-btn color="primary" :to="`${this.$route.path}/new`">New</v-btn>
         </v-layout>
         <v-divider></v-divider>
         <br>
@@ -12,7 +12,7 @@
                 <td>
                     <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
                 </td>
-                <td v-for="(header,i) in headers" :key="i">{{ props.item[header.value] }}</td>
+                <td @click.stop.prevent="gotoDetail(props.item.id)" v-for="(header,i) in headers" :key="i">{{ props.item[header.value] }}</td>
             </template>
         </v-data-table>
     </div>
@@ -22,6 +22,7 @@
     import axios from 'axios';
     export default {
         mounted() {
+            console.log(this.$route);
 
         },
         props: {
@@ -66,6 +67,9 @@
             }
         },
         methods: {
+            gotoDetail(id){
+                this.$router.push(`${this.$route.path}/${id}`)
+            },
             getDataFromApi() {
                 this.loading = true
                 return new Promise((resolve, reject) => {
