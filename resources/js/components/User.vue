@@ -1,23 +1,37 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+       <winkle-table :headers="header" :dataUrl="dataUrl">
+           
+       </winkle-table>
     </div>
 </template>
 
 <script>
+    import winkleTable from './html/winkelTable.vue'
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        components:{
+            winkleTable
+        },
+        data(){
+            return {
+                dataUrl:'/api/user',
+                header: [{
+                        text: 'ID',
+                        align: 'left',
+                        value: 'id'
+                    },
+                    {
+                        text: 'Email',
+                        value: 'email'
+                    },
+                    {
+                        text: 'Name',
+                        value: 'name'
+                    }
+                ]
+            }
         }
+       
     }
+
 </script>

@@ -20,6 +20,7 @@ class CreateProductPricesTable extends Migration
             $table->boolean('main');
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
+            $table->boolean('active');
             $table->timestamps();
         });
     }

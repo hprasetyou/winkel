@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->bigInteger('store_id');
+            $table->boolean('active');
             $table->timestamps();
         });
     }

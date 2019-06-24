@@ -11,11 +11,15 @@ class ResourceController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request  $request)
     {
-        $data = $this->model::paginate(15);
+        $perpage = $request->query('perpage')?$request->query('perpage'):15;
+        $orderCol = $request->query('sortby')?$request->query('sortby'):'id';
+        $orderDirection = $request->query('descending') == 'true'?'desc':'asc';
+        $data = $this->model::orderBy($orderCol,$orderDirection)->paginate($perpage);
         return $data->toJson(JSON_PRETTY_PRINT);
     }
 
