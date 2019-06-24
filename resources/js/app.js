@@ -4,10 +4,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-
 window.Vue = require('vue');
 
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+
+Vue.use(Vuetify)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -29,4 +31,17 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    data() {
+        return {
+            
+            message: 'Hello',
+            drawer: true,
+            items: [
+              { title: 'Home', icon: 'dashboard' },
+              { title: 'About', icon: 'question_answer' }
+            ],
+            mini: true,
+            right: null
+        }
+    },
 });
