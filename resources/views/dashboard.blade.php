@@ -39,7 +39,7 @@
             </v-toolbar>
             <v-content>
                 <v-container fluid fill-height>
-                    <v-layout justify-center>
+                    <v-layout column>
                       <router-view></router-view>
                     </v-layout>
                 </v-container>

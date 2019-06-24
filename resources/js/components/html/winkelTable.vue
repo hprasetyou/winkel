@@ -1,17 +1,18 @@
 <template>
     <div>
-        <v-data-table
-            v-model="selected" select-all :headers="headers" :items="tableData"  :pagination.sync="pagination"
+        <v-layout row>
+            <v-spacer></v-spacer>
+            <v-btn color="primary">New</v-btn>
+        </v-layout>
+        <v-divider></v-divider>
+        <br>
+        <v-data-table v-model="selected" select-all :headers="headers" :items="tableData" :pagination.sync="pagination"
             :total-items="totalItem" :loading="loading" class="elevation-1">
             <template v-slot:items="props">
                 <td>
-                    <v-checkbox
-                    v-model="props.selected"
-                    primary
-                    hide-details
-                    ></v-checkbox>
+                    <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
                 </td>
-                <td v-for="(header,i) in headers" :key="i" >{{ props.item[header.value] }}</td>
+                <td v-for="(header,i) in headers" :key="i">{{ props.item[header.value] }}</td>
             </template>
         </v-data-table>
     </div>
@@ -21,13 +22,13 @@
     import axios from 'axios';
     export default {
         mounted() {
-            
+
         },
-        props:{
-            headers:{
+        props: {
+            headers: {
                 type: Array
             },
-            dataUrl:{
+            dataUrl: {
                 type: String
             }
         },
@@ -42,16 +43,16 @@
             }
         },
         watch: {
-        pagination: {
-            handler () {
-            this.getDataFromApi()
-                .then(data => {
-                this.tableData = data.items
-                this.totalItem = data.total
-                })
-            },
-            deep: true
-        }
+            pagination: {
+                handler() {
+                    this.getDataFromApi()
+                        .then(data => {
+                            this.tableData = data.items
+                            this.totalItem = data.total
+                        })
+                },
+                deep: true
+            }
         },
         computed: {
             pages() {
@@ -75,23 +76,23 @@
                         rowsPerPage
                     } = this.pagination
                     console.log(this.pagination);
-                    
+
                     axios.get(this.dataUrl, {
-                        params: {
-                            page: page,
-                            perpage: rowsPerPage,
-                            sortby:sortBy,
-                            descending
-                        }
-                    })
-                    .then(response => {
-                        // handle success
-                        this.loading = false;
-                        resolve({
-                            items:response.data.data,
-                            total:response.data.total
+                            params: {
+                                page: page,
+                                perpage: rowsPerPage,
+                                sortby: sortBy,
+                                descending
+                            }
                         })
-                    })
+                        .then(response => {
+                            // handle success
+                            this.loading = false;
+                            resolve({
+                                items: response.data.data,
+                                total: response.data.total
+                            })
+                        })
 
                 })
             }
