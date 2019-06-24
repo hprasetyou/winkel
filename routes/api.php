@@ -18,5 +18,6 @@ use Illuminate\Http\Request;
 // });
 Route::resources([
     '/user' => 'Admin\UserController',
-    '/store' => 'Admin\StoreController'
+    '/store' => 'Admin\StoreController',
+    '/product' => 'Admin\ProductController'
 ]);
