@@ -1,9 +1,17 @@
 <template>
     <div>
-        <v-data-table :headers="headers" :items="tableData"  :pagination.sync="pagination"
+        <v-data-table
+            v-model="selected" select-all :headers="headers" :items="tableData"  :pagination.sync="pagination"
             :total-items="totalItem" :loading="loading" class="elevation-1">
             <template v-slot:items="props">
-                <td v-for="(header,i) in headers" :key="i" class="text-xs-right">{{ props.item[header.value] }}</td>
+                <td>
+                    <v-checkbox
+                    v-model="props.selected"
+                    primary
+                    hide-details
+                    ></v-checkbox>
+                </td>
+                <td v-for="(header,i) in headers" :key="i" >{{ props.item[header.value] }}</td>
             </template>
         </v-data-table>
     </div>
@@ -25,6 +33,7 @@
         },
         data() {
             return {
+                selected: [],
                 rowsPerPage: 5,
                 pagination: {},
                 totalItem: 0,

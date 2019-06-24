@@ -27,6 +27,14 @@
                     {
                         text: 'Name',
                         value: 'name'
+                    },
+                    {
+                        text: 'Created At',
+                        value: 'created_at'
+                    },
+                    {
+                        text: 'Updated At',
+                        value: 'updated_at'
                     }
                 ]
             }

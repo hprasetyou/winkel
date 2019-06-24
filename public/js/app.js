@@ -1724,6 +1724,12 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Name',
         value: 'name'
+      }, {
+        text: 'Created At',
+        value: 'created_at'
+      }, {
+        text: 'Updated At',
+        value: 'updated_at'
       }]
     };
   }
@@ -1753,6 +1759,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
@@ -1766,6 +1780,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      selected: [],
       rowsPerPage: 5,
       pagination: {},
       totalItem: 0,
@@ -2985,6 +3000,7 @@ var render = function() {
       _c("v-data-table", {
         staticClass: "elevation-1",
         attrs: {
+          "select-all": "",
           headers: _vm.headers,
           items: _vm.tableData,
           pagination: _vm.pagination,
@@ -3000,14 +3016,40 @@ var render = function() {
           {
             key: "items",
             fn: function(props) {
-              return _vm._l(_vm.headers, function(header, i) {
-                return _c("td", { key: i, staticClass: "text-xs-right" }, [
-                  _vm._v(_vm._s(props.item[header.value]))
-                ])
-              })
+              return [
+                _c(
+                  "td",
+                  [
+                    _c("v-checkbox", {
+                      attrs: { primary: "", "hide-details": "" },
+                      model: {
+                        value: props.selected,
+                        callback: function($$v) {
+                          _vm.$set(props, "selected", $$v)
+                        },
+                        expression: "props.selected"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.headers, function(header, i) {
+                  return _c("td", { key: i }, [
+                    _vm._v(_vm._s(props.item[header.value]))
+                  ])
+                })
+              ]
             }
           }
-        ])
+        ]),
+        model: {
+          value: _vm.selected,
+          callback: function($$v) {
+            _vm.selected = $$v
+          },
+          expression: "selected"
+        }
       })
     ],
     1
