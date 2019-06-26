@@ -47,12 +47,12 @@ class ResourceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Store  $store
      * @return \Illuminate\Http\Response
      */
-    public function show(Store $store)
+    public function show(Request $request, $id)
     {
-        //
+        $data = $this->model::find($id);
+        return $data->toJson(JSON_PRETTY_PRINT);
     }
 
     /**

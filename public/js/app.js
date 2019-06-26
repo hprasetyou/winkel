@@ -1746,6 +1746,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1780,15 +1782,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      formDefinition: []
+      editMode: false,
+      formDefinition: [],
+      dataUrl: '',
+      data: {},
+      title: ''
     };
   },
   mounted: function mounted() {
     this.formDefinition = this.$route.meta.formDefinition;
-    console.log(this.formDefinition);
+    this.dataUrl = this.$route.meta.dataUrl;
+    this.title = this.$route.meta.title;
+    this.getData();
+  },
+  methods: {
+    getData: function getData() {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(this.dataUrl, "/").concat(this.$route.params.id)).then(function (response) {
+        _this.data = response.data;
+      });
+    }
   }
 });
 
@@ -3068,7 +3091,39 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h1", [_vm._v("form")]),
+      _c(
+        "v-layout",
+        { attrs: { row: "" } },
+        [
+          _c("h3", [_vm._v(_vm._s(_vm.title))]),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: "primary" },
+              on: {
+                click: function($event) {
+                  _vm.editMode = !_vm.editMode
+                }
+              }
+            },
+            [_vm._v(_vm._s(_vm.editMode ? "Cancel" : "Edit"))]
+          ),
+          _vm._v(" "),
+          _vm.editMode
+            ? _c("v-btn", { attrs: { color: "success" } }, [
+                _vm._v("\n            Save\n        ")
+              ])
+            : _vm._e()
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("v-divider"),
+      _vm._v(" "),
+      _c("br"),
       _vm._v(" "),
       _c(
         "v-card",
@@ -3083,68 +3138,79 @@ var render = function() {
                   _c(
                     "v-layout",
                     { attrs: { row: "", wrap: "" } },
-                    [
-                      _c("v-flex", { attrs: { xs6: "", "px-2": "" } }, [
-                        _vm.formDefinition.left
-                          ? _c(
-                              "div",
-                              _vm._l(_vm.formDefinition.left, function(
-                                item,
-                                i
-                              ) {
-                                return _c(
-                                  "div",
-                                  { key: i },
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: { label: item.label, required: "" }
-                                    })
-                                  ],
-                                  1
-                                )
-                              }),
-                              0
-                            )
-                          : _vm._e()
-                      ]),
-                      _vm._v(" "),
-                      _c("v-flex", { attrs: { xs6: "", "px-2": "" } }, [
-                        _vm.formDefinition.right
-                          ? _c(
-                              "div",
-                              _vm._l(_vm.formDefinition.right, function(
-                                item,
-                                i
-                              ) {
-                                return _c(
-                                  "div",
-                                  { key: i },
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: { label: item.label, required: "" }
-                                    })
-                                  ],
-                                  1
-                                )
-                              }),
-                              0
-                            )
-                          : _vm._e()
-                      ]),
-                      _vm._v(" "),
-                      _c(
+                    _vm._l(["left", "right"], function(group, g) {
+                      return _c(
                         "v-flex",
-                        { attrs: { xs12: "", "px-2": "" } },
+                        { key: g, attrs: { xs6: "", "px-2": "" } },
                         [
-                          _c("v-btn", { attrs: { color: "success" } }, [
-                            _vm._v(
-                              "\n                            Validate\n                        "
-                            )
-                          ])
+                          _vm.formDefinition[group]
+                            ? _vm._l(_vm.formDefinition[group], function(
+                                item,
+                                i
+                              ) {
+                                return _c(
+                                  "div",
+                                  { key: i },
+                                  [
+                                    _c("v-text-field", {
+                                      directives: [
+                                        {
+                                          name: "show",
+                                          rawName: "v-show",
+                                          value: _vm.editMode,
+                                          expression: "editMode"
+                                        }
+                                      ],
+                                      attrs: {
+                                        label: item.label,
+                                        required: ""
+                                      },
+                                      model: {
+                                        value: _vm.data[item.model],
+                                        callback: function($$v) {
+                                          _vm.$set(_vm.data, item.model, $$v)
+                                        },
+                                        expression: "data[item.model]"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-layout",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: !_vm.editMode,
+                                            expression: "!editMode"
+                                          }
+                                        ],
+                                        attrs: { row: "", wrap: "" }
+                                      },
+                                      [
+                                        _c("v-flex", { attrs: { xs3: "" } }, [
+                                          _c("label", { attrs: { for: "" } }, [
+                                            _vm._v(_vm._s(item.label))
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("v-flex", { attrs: { xs9: "" } }, [
+                                          _c("label", { attrs: { for: "" } }, [
+                                            _vm._v(_vm._s(_vm.data[item.model]))
+                                          ])
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              })
+                            : _vm._e()
                         ],
-                        1
+                        2
                       )
-                    ],
+                    }),
                     1
                   )
                 ],
