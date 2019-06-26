@@ -22,6 +22,21 @@ export default {
             text: 'Updated At',
             value: 'updated_at'
         }],
+        formDefinition:{
+            left:[
+                {
+                    label:'Email',
+                    model:'email',
+                    type:'input'
+                },
+            ],
+            right:[
+                {
+                    label:'Name',
+                    model:'name',
+                    type:'input'
+                }]
+        },
         dataUrl:'/api/user'
     },
     products:{
@@ -43,6 +58,15 @@ export default {
             text: 'Updated At',
             value: 'updated_at'
         }],
+        formDefinition:{
+            left:[
+                {
+                    label:'Name',
+                    model:'name',
+                    type:'input'
+                }
+            ]
+        },
         dataUrl:'/api/product'
     }
 }

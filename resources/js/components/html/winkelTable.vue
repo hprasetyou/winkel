@@ -79,7 +79,6 @@
                         page,
                         rowsPerPage
                     } = this.pagination
-                    console.log(this.pagination);
 
                     axios.get(this.dataUrl, {
                             params: {

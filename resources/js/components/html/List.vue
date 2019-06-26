@@ -8,7 +8,7 @@
 
 <script>
     import winkleTable from './winkelTable.vue';
-    import conf from '../../res/resource-definition';
+
     export default {
         components:{
             winkleTable
