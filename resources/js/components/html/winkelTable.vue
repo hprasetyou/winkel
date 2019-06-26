@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-layout row>
+            <h3>{{ title }}</h3>
             <v-spacer></v-spacer>
             <v-btn color="primary" :to="`${this.$route.path}/new`">New</v-btn>
         </v-layout>
@@ -21,15 +22,14 @@
 <script>
     import axios from 'axios';
     export default {
-        mounted() {
-            console.log(this.$route);
-
-        },
         props: {
             headers: {
                 type: Array
             },
             dataUrl: {
+                type: String
+            },
+            title: {
                 type: String
             }
         },
@@ -46,19 +46,19 @@
         watch: {
             pagination: {
                 handler() {
-                    this.getDataFromApi()
-                        .then(data => {
-                            this.tableData = data.items
-                            this.totalItem = data.total
-                        })
+                    this.getData()
+                },
+                deep: true
+            },
+            title: {
+                handler() {
+                    this.getData()
                 },
                 deep: true
             }
         },
         computed: {
             pages() {
-                console.log(this.pagination);
-
                 if (this.pagination.rowsPerPage == null ||
                     this.pagination.totalItems == null
                 ) return 0
@@ -99,6 +99,14 @@
                         })
 
                 })
+            },
+            getData(){
+                    this.getDataFromApi()
+                        .then(data => {
+                            this.tableData = data.items
+                            this.totalItem = data.total
+                        })
+
             }
 
         },
