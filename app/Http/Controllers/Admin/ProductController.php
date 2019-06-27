@@ -7,9 +7,8 @@ use App\Http\Controllers\Controller;
 
 class ProductController extends ResourceController
 {
-    function __construct(){
-        $this->model = '\App\Product';
-    }
+    protected $model = '\App\Product';
+    
     /**
      * Prepare data before submit
      * 
