@@ -1792,6 +1792,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1836,7 +1839,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       })["catch"](function (err) {
         _this2.openSnackbar({
           text: "An error has occured",
-          color: "danger"
+          color: "error"
         });
       });
     }
@@ -3166,6 +3169,10 @@ var render = function() {
           _c("h3", [_vm._v(_vm._s(_vm.title))]),
           _vm._v(" "),
           _c("v-spacer"),
+          _vm._v(" "),
+          _c("v-btn", { attrs: { color: "error" } }, [
+            _vm._v("\n            Delete\n        ")
+          ]),
           _vm._v(" "),
           _c(
             "v-btn",
@@ -45753,6 +45760,52 @@ for (var key in _res_resource_definition__WEBPACK_IMPORTED_MODULE_2__["default"]
 
 /***/ }),
 
+/***/ "./resources/js/store/module/snackbar.js":
+/*!***********************************************!*\
+  !*** ./resources/js/store/module/snackbar.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var state = {
+  visible: false,
+  text: null,
+  timeout: 6000,
+  multiline: false,
+  color: null
+};
+var mutations = {
+  showSnackbar: function showSnackbar(state, payload) {
+    state.text = payload.text;
+    state.color = payload.color;
+    state.multiline = payload.text.length > 50 ? true : false;
+
+    if (payload.multiline) {
+      state.multiline = payload.multiline;
+    }
+
+    if (payload.timeout) {
+      state.timeout = payload.timeout;
+    }
+
+    state.visible = true;
+  },
+  closeSnackbar: function closeSnackbar(state) {
+    state.visible = false;
+    state.multiline = false;
+    state.timeout = 6000;
+    state.text = null;
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: state,
+  mutations: mutations
+});
+
+/***/ }),
+
 /***/ "./resources/js/store/store.js":
 /*!*************************************!*\
   !*** ./resources/js/store/store.js ***!
@@ -45766,41 +45819,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _module_snackbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./module/snackbar */ "./resources/js/store/module/snackbar.js");
+
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  state: {
-    snackbar: {
-      visible: false,
-      text: null,
-      timeout: 6000,
-      multiline: false,
-      color: null
-    }
-  },
-  mutations: {
-    showSnackbar: function showSnackbar(state, payload) {
-      state.snackbar.text = payload.text;
-      state.snackbar.color = payload.color;
-      state.snackbar.multiline = payload.text.length > 50 ? true : false;
-
-      if (payload.multiline) {
-        state.snackbar.multiline = payload.multiline;
-      }
-
-      if (payload.timeout) {
-        state.snackbar.timeout = payload.timeout;
-      }
-
-      state.snackbar.visible = true;
-    },
-    closeSnackbar: function closeSnackbar(state) {
-      state.snackbar.visible = false;
-      state.snackbar.multiline = false;
-      state.snackbar.timeout = 6000;
-      state.snackbar.text = null;
-    }
+  modules: {
+    snackbar: _module_snackbar__WEBPACK_IMPORTED_MODULE_2__["default"]
   }
 });
 
