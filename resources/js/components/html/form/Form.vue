@@ -61,6 +61,12 @@
                     .then(response => {
                         this.data = response.data;
                     })
+            },
+            saveData() {
+                Axios.post(`${this.dataUrl}/${this.$route.params.id}`)
+                    .then(response =>{
+                        this.data = response.data;
+                    })
             }
         },
     }
