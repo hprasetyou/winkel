@@ -1946,6 +1946,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -1962,7 +1963,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selected: [],
-      rowsPerPage: 5,
+      rowsPerPage: 10,
       pagination: {},
       totalItem: 0,
       loading: true,
@@ -4837,6 +4838,7 @@ var render = function() {
           headers: _vm.headers,
           items: _vm.tableData,
           pagination: _vm.pagination,
+          "rows-per-page-items": [15, 30, 50],
           "total-items": _vm.totalItem,
           loading: _vm.loading
         },

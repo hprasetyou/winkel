@@ -8,6 +8,7 @@
         <v-divider></v-divider>
         <br>
         <v-data-table v-model="selected" select-all :headers="headers" :items="tableData" :pagination.sync="pagination"
+        :rows-per-page-items="[15,30,50]"
             :total-items="totalItem" :loading="loading" class="elevation-1">
             <template v-slot:items="props">
                 <td>
@@ -36,7 +37,7 @@
         data() {
             return {
                 selected: [],
-                rowsPerPage: 5,
+                rowsPerPage: 10,
                 pagination: {},
                 totalItem: 0,
                 loading: true,
