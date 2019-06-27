@@ -19,6 +19,7 @@
                 <v-toolbar-title>Application</v-toolbar-title>
             </v-toolbar>
             <v-content>
+                <wk-snackbar></wk-snackbar>
                 <v-container fluid fill-height>
                     <v-layout column>
                       <router-view></router-view>

@@ -4,7 +4,7 @@
             <h3>{{ title }}</h3>
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="editMode = !editMode">{{ editMode?'Cancel':'Edit' }}</v-btn>
-            <v-btn color="success" v-if="editMode">
+            <v-btn color="success" @click="saveData" v-if="editMode">
                 Save
             </v-btn>
         </v-layout>
@@ -38,6 +38,7 @@
     </div>
 </template>
 <script>
+    import { mapMutations } from "vuex";
     import Axios from 'axios';
     export default {
         data() {
@@ -56,6 +57,10 @@
             this.getData();
         },
         methods: {
+            ...mapMutations(["showSnackbar", "closeSnackbar"]),
+            openSnackbar(options) {
+            this.showSnackbar(options)
+            },
             getData() {
                 Axios.get(`${this.dataUrl}/${this.$route.params.id}`)
                     .then(response => {
@@ -63,9 +68,19 @@
                     })
             },
             saveData() {
-                Axios.post(`${this.dataUrl}/${this.$route.params.id}`)
+                Axios.put(`${this.dataUrl}/${this.$route.params.id}`, this.data)
                     .then(response =>{
                         this.data = response.data;
+                        this.openSnackbar({
+                            text:"All changes saved!",
+                            color: "success"
+                        })
+                        this.editMode = false;
+                    }).catch(err => {
+                        this.openSnackbar({
+                            text:"An error has occured",
+                            color: "danger"
+                        })
                     })
             }
         },

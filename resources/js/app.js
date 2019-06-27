@@ -4,6 +4,8 @@ import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import { routes } from './routes';
+import { store } from './store/store'
+import wkSnackbar from './components/html/winkelSnackbar.vue';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
@@ -29,10 +31,13 @@ const router = new VueRouter({
   })
 const app = new Vue({
     el: '#app',
+    components:{
+      wkSnackbar
+    },
     router,
+    store,
     data() {
         return {
-            
             message: 'Hello',
             drawer: true,
             items: [
