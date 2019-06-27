@@ -42,8 +42,7 @@ class ResourceController extends Controller
     {
         $data = $this->prepareStoreData($request);
         $data->save();
-        return response()
-        ->json($data);
+        return $data->toJson(JSON_PRETTY_PRINT);
     }
 
     /**
@@ -96,18 +95,18 @@ class ResourceController extends Controller
     {
         $data = $this->prepareStoreData($request, (int)$id);
         $data->save();
-        return response()
-        ->json($data);
+        return $data->toJson(JSON_PRETTY_PRINT);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Store  $store
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Store $store)
+    public function destroy($id)
     {
-        //
+        $this->model::findOrFail($id)->delete();
+        return response()
+        ->json(['affectedRows'=>$id]);
     }
 }
