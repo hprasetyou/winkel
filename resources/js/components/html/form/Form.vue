@@ -3,7 +3,10 @@
         <v-layout row>
             <h3>{{ title }}</h3>
             <v-spacer></v-spacer>
-            <v-btn color="error" >
+            <v-btn color="" @click="$router.push(baseUrl)">
+                Back
+            </v-btn>
+            <v-btn color="error" @click="deleteConfirmation">
                 Delete
             </v-btn>
             <v-btn color="primary" @click="editMode = !editMode">{{ editMode?'Cancel':'Edit' }}</v-btn>
@@ -50,6 +53,7 @@
                 formDefinition: [],
                 dataUrl: '',
                 data: {},
+                baseUrl: '',
                 title: ''
             }
         },
@@ -57,6 +61,7 @@
             this.formDefinition = this.$route.meta.formDefinition
             this.dataUrl = this.$route.meta.dataUrl
             this.title = this.$route.meta.title;
+            this.baseUrl = this.$route.meta.baseUrl;
             this.getData();
         },
         methods: {
@@ -85,7 +90,25 @@
                             color: "error"
                         })
                     })
-            }
+            },
+            deleteConfirmation(){
+                this.$confirm('Delete this data?').then(res => {
+                    if(res){
+                        this.deleteData();
+                    }
+                })
+            },
+            deleteData() {
+                Axios.delete(`${this.dataUrl}/${this.$route.params.id}`)
+                    .then(response => {
+                        this.$router.push(this.baseUrl);
+                        this.openSnackbar({
+                            text:"Data has been deleted!",
+                            color: "success"
+                        })
+                    })
+            },
+
         },
     }
 

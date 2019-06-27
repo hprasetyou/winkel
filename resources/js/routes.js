@@ -6,15 +6,17 @@ const routes = [];
 
 for (const key in resConf) {
     if (resConf.hasOwnProperty(key)) {
+        const meta = resConf[key]
+        meta.baseUrl = `/${key}`
         routes.push({
             path: `/${key}`,
             component: ListComponent,
-            meta:resConf[key]
+            meta
         })
         routes.push({
             path: `/${key}/:id`,
             component: FormComponent,
-            meta:resConf[key]
+            meta
         })       
     }
 }
