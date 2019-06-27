@@ -36,12 +36,32 @@ class ResourceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->prepareStoreData($request);
+        $data->save();
+        return response()
+        ->json($data);
+    }
+
+    /**
+     * Prepare data before submit
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     */
+    protected function prepareStoreData(Request $request, int $id = null){
+        $data = json_decode($request->getContent(), true);
+        if(!$id){
+            $obj = new $this->model;
+        }else{
+            $obj = $this->model::findOrFail($id);
+        }
+        foreach ($data as $key => $value) {
+            $obj->$key = $value;
+        }
+        return $obj;
     }
 
     /**
@@ -70,12 +90,14 @@ class ResourceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Store  $store
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Store $store)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $this->prepareStoreData($request, (int)$id);
+        $data->save();
+        return response()
+        ->json($data);
     }
 
     /**
