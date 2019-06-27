@@ -5,7 +5,7 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import { routes } from './routes';
 import { store } from './store/store'
-import wkSnackbar from './components/html/winkelSnackbar.vue';
+import wkSnackbar from './components/html/utils/winkelSnackbar.vue';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
