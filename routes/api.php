@@ -16,8 +16,10 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::resources([
-    '/user' => 'Admin\UserController',
-    '/store' => 'Admin\StoreController',
-    '/product' => 'Admin\ProductController'
-]);
+Route::middleware(['auth:api'])->group(function () {
+    Route::resources([
+        '/user' => 'Admin\UserController',
+        '/store' => 'Admin\StoreController',
+        '/product' => 'Admin\ProductController'
+    ]);
+});
