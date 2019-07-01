@@ -7,10 +7,13 @@ import { routes } from './routes';
 import { store } from './store/store'
 import wkSnackbar from './components/html/utils/winkelSnackbar.vue';
 import VuetifyConfirm from 'vuetify-confirm';
+import apiService from './apiService';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(VuetifyConfirm);
+
+Vue.$http = apiService;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
