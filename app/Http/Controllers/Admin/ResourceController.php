@@ -4,10 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ResourceController extends Controller
 {
-    protected $model;
+    protected function prepareData(){
+        $tbName = $this->decamelize(str_replace('Controller','',get_class($this)));
+        $data = DB::table('users');
+        return $data;
+    }
+    private function decamelize($string) {
+        return strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +27,7 @@ class ResourceController extends Controller
         $perpage = $request->query('perpage')?$request->query('perpage'):15;
         $orderCol = $request->query('sortby')?$request->query('sortby'):'id';
         $orderDirection = $request->query('descending') == 'true'?'desc':'asc';
-        $data = $this->model::orderBy($orderCol,$orderDirection)->paginate($perpage);
+        $data = $this->prepareData()->orderBy($orderCol,$orderDirection)->paginate($perpage);
         return $data->toJson(JSON_PRETTY_PRINT);
     }
 

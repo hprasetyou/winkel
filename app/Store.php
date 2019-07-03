@@ -13,4 +13,8 @@ class Store extends Model
     {
         return $this->hasMany('App\Product');
     }
+    public function users(){
+        return $this->belongsToMany('App\User')
+        ->withTimestamps();
+    }
 }

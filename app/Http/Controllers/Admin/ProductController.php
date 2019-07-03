@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 
 class ProductController extends ResourceController
 {
-    protected $model = '\App\Product';
-    
     /**
      * Prepare data before submit
      * 
