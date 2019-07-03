@@ -21,7 +21,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     export default {
         props: {
             headers: {
@@ -81,7 +80,7 @@
                         rowsPerPage
                     } = this.pagination
 
-                    axios.get(this.dataUrl, {
+                    this.axios.get(this.dataUrl, {
                             params: {
                                 page: page,
                                 perpage: rowsPerPage,

@@ -24,9 +24,6 @@
                 credential: {}
             }
         },
-        mounted() {
-            console.log(this.getToken);
-        },
         computed:{
             ...mapGetters(["hasToken","getToken"])
         },
@@ -47,6 +44,7 @@
                 }).then(o => {
                     const token = o.data.access_token;
                     this.updateToken({token});
+                    window.location = '/dashboard';
                 }).catch(e => {                    
                     this.openSnackbar({
                         text: e,

@@ -11,7 +11,7 @@ const getters = {
     return state.access_token.length > 0
   },
   getToken(state){
-    return state.access_token
+    return `Bearer ${state.access_token}`
   }
 }
 export default {

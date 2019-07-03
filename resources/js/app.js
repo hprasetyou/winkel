@@ -25,7 +25,20 @@ Vue.component('wk-snackbar',wkSnackbar);
 
 const router = new VueRouter({
     routes
-  })
+})
+
+router.beforeEach((to, from, next) => {
+  const publicPath = ['/login','/register','/'];
+  if(!store.getters.hasToken){
+    
+     if(publicPath.indexOf(window.location.pathname)<0){
+       window.location = '/login';
+     }
+  } else {
+     next();
+  }
+});
+
 const app = new Vue({
     el: '#app',
     router,
@@ -41,5 +54,13 @@ const app = new Vue({
             mini: true,
             right: null
         }
+    },
+    methods: {
+      logOut(){
+        store.commit('updateToken',{
+          token:''
+        })
+        window.location = '/login';
+      }
     },
 });

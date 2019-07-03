@@ -45,7 +45,6 @@
 </template>
 <script>
     import { mapMutations } from "vuex";
-    import Axios from 'axios';
     export default {
         data() {
             return {
@@ -70,13 +69,13 @@
                 this.showSnackbar(options)
             },
             getData() {
-                Axios.get(`${this.dataUrl}/${this.$route.params.id}`)
+                this.axios.get(`${this.dataUrl}/${this.$route.params.id}`)
                     .then(response => {
                         this.data = response.data;
                     })
             },
             saveData() {
-                Axios.put(`${this.dataUrl}/${this.$route.params.id}`, this.data)
+                this.axios.put(`${this.dataUrl}/${this.$route.params.id}`, this.data)
                     .then(response =>{
                         this.data = response.data;
                         this.openSnackbar({
@@ -99,7 +98,7 @@
                 })
             },
             deleteData() {
-                Axios.delete(`${this.dataUrl}/${this.$route.params.id}`)
+                this.axios.delete(`${this.dataUrl}/${this.$route.params.id}`)
                     .then(response => {
                         this.$router.push(this.baseUrl);
                         this.openSnackbar({

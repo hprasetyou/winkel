@@ -1747,8 +1747,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1799,7 +1797,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1825,14 +1822,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getData: function getData() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("".concat(this.dataUrl, "/").concat(this.$route.params.id)).then(function (response) {
+      this.axios.get("".concat(this.dataUrl, "/").concat(this.$route.params.id)).then(function (response) {
         _this.data = response.data;
       });
     },
     saveData: function saveData() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.put("".concat(this.dataUrl, "/").concat(this.$route.params.id), this.data).then(function (response) {
+      this.axios.put("".concat(this.dataUrl, "/").concat(this.$route.params.id), this.data).then(function (response) {
         _this2.data = response.data;
 
         _this2.openSnackbar({
@@ -1860,7 +1857,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     deleteData: function deleteData() {
       var _this4 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("".concat(this.dataUrl, "/").concat(this.$route.params.id)).then(function (response) {
+      this.axios["delete"]("".concat(this.dataUrl, "/").concat(this.$route.params.id)).then(function (response) {
         _this4.$router.push(_this4.baseUrl);
 
         _this4.openSnackbar({
@@ -1923,8 +1920,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1947,7 +1942,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     headers: {
@@ -2004,7 +1998,8 @@ __webpack_require__.r(__webpack_exports__);
             descending = _this$pagination.descending,
             page = _this$pagination.page,
             rowsPerPage = _this$pagination.rowsPerPage;
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(_this.dataUrl, {
+
+        _this.axios.get(_this.dataUrl, {
           params: {
             page: page,
             perpage: rowsPerPage,
@@ -2070,9 +2065,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       credential: {}
     };
   },
-  mounted: function mounted() {
-    console.log(this.getToken);
-  },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["hasToken", "getToken"])),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(["showSnackbar", "closeSnackbar", "updateToken"]), {
     openSnackbar: function openSnackbar(options) {
@@ -2094,6 +2086,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.updateToken({
           token: token
         });
+
+        window.location = '/dashboard';
       })["catch"](function (e) {
         _this.openSnackbar({
           text: e,
@@ -77026,10 +77020,18 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _store_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/store */ "./resources/js/store/store.js");
+
 
 var headers = {
   'Accept': 'application/json'
 };
+
+if (_store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.hasToken) {
+  headers.Authorization = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getToken;
+  console.log(headers);
+}
+
 /* harmony default export */ __webpack_exports__["default"] = (axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
   headers: headers
 }));
@@ -77079,6 +77081,17 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('wk-snackbar', _components_
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: _routes__WEBPACK_IMPORTED_MODULE_4__["routes"]
 });
+router.beforeEach(function (to, from, next) {
+  var publicPath = ['/login', '/register', '/'];
+
+  if (!_store_store__WEBPACK_IMPORTED_MODULE_5__["store"].getters.hasToken) {
+    if (publicPath.indexOf(window.location.pathname) < 0) {
+      window.location = '/login';
+    }
+  } else {
+    next();
+  }
+});
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   router: router,
@@ -77097,6 +77110,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       mini: true,
       right: null
     };
+  },
+  methods: {
+    logOut: function logOut() {
+      _store_store__WEBPACK_IMPORTED_MODULE_5__["store"].commit('updateToken', {
+        token: ''
+      });
+      window.location = '/login';
+    }
   }
 });
 
@@ -77642,7 +77663,7 @@ var getters = {
     return state.access_token.length > 0;
   },
   getToken: function getToken(state) {
-    return state.access_token;
+    return "Bearer ".concat(state.access_token);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
