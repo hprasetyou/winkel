@@ -8,9 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 class ResourceController extends Controller
 {
+    protected $model;
+    protected $tbName;
+    public function __construct(){
+        $objName = $this->decamelize(str_replace('Controller','',(new \ReflectionClass($this))->getShortName()));
+        $this->tbName = \Illuminate\Support\Pluralizer::plural($objName,2);
+        $this->model = 'App\\' . ucfirst($objName);
+    }
+
     protected function prepareData(){
-        $tbName = $this->decamelize(str_replace('Controller','',get_class($this)));
-        $data = DB::table('users');
+        $data = DB::table($this->tbName,2);
         return $data;
     }
     private function decamelize($string) {
