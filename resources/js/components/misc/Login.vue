@@ -14,7 +14,8 @@
 <script>
     import * as config from '../../res/config';
     import {
-        mapMutations
+        mapMutations,
+        mapGetters
     } from "vuex";
 
     export default {
@@ -23,8 +24,14 @@
                 credential: {}
             }
         },
+        mounted() {
+            console.log(this.getToken);
+        },
+        computed:{
+            ...mapGetters(["hasToken","getToken"])
+        },
         methods: {
-            ...mapMutations(["showSnackbar", "closeSnackbar"]),
+            ...mapMutations(["showSnackbar", "closeSnackbar","updateToken"]),
             openSnackbar(options) {
                 this.showSnackbar(options)
             },
@@ -38,11 +45,9 @@
                     "password": this.credential.password,
                     "grant_type": "password"
                 }).then(o => {
-                    console.log(o);
-
-                }).catch(e => {
-                    console.log(e);
-                    
+                    const token = o.data.access_token;
+                    this.updateToken({token});
+                }).catch(e => {                    
                     this.openSnackbar({
                         text: e,
                         color: "error"

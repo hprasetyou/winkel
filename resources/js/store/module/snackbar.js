@@ -6,10 +6,7 @@ const state = {
     color:null
   }
 const mutations = {
-    showSnackbar(state, payload) {
-      console.log('testtttt');
-      
-        
+    showSnackbar(state, payload) {        
       state.text = payload.text
       state.color = payload.color
       state.multiline = (payload.text.length > 50) ? true : false
