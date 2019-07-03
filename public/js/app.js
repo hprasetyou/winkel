@@ -2044,6 +2044,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _res_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../res/config */ "./resources/js/res/config.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2058,27 +2063,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       credential: {}
     };
   },
-  methods: {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(["showSnackbar", "closeSnackbar"]), {
+    openSnackbar: function openSnackbar(options) {
+      this.showSnackbar(options);
+    },
     doLogin: function doLogin() {
-      console.log('submitt');
-      this.$http.post('/oauth/token', {
+      var _this = this;
+
+      this.axios.post('/oauth/token', {
         "client_id": _res_config__WEBPACK_IMPORTED_MODULE_0__["API_CLIENT_ID"],
         "client_secret": _res_config__WEBPACK_IMPORTED_MODULE_0__["API_CLIENT_SECRET"],
         "scope": "*",
-        "username": credential.username,
-        "password": credential.password,
+        "username": this.credential.username,
+        "password": this.credential.password,
         "grant_type": "password"
       }).then(function (o) {
         console.log(o);
+      })["catch"](function (e) {
+        console.log(e);
+
+        _this.openSnackbar({
+          text: e,
+          color: "error"
+        });
       });
     }
-  }
+  })
 });
 
 /***/ }),
@@ -4575,6 +4592,19 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-axios/dist/vue-axios.min.js":
+/*!******************************************************!*\
+  !*** ./node_modules/vue-axios/dist/vue-axios.min.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(o){return typeof o}:function(o){return o&&"function"==typeof Symbol&&o.constructor===Symbol&&o!==Symbol.prototype?"symbol":typeof o};!function(){function o(e,t){if(!o.installed){if(o.installed=!0,!t)return void console.error("You have to install axios");e.axios=t,Object.defineProperties(e.prototype,{axios:{get:function(){return t}},$http:{get:function(){return t}}})}}"object"==( false?undefined:_typeof(exports))?module.exports=o: true?!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function(){return o}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)):undefined}();
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/html/List.vue?vue&type=template&id=60d0d9e7&":
 /*!************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/html/List.vue?vue&type=template&id=60d0d9e7& ***!
@@ -4975,49 +5005,47 @@ var render = function() {
   return _c(
     "v-card",
     [
-      _c("v-card-text", [
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                return _vm.doLogin()
-              }
-            }
-          },
-          [
-            _c("v-text-field", {
-              attrs: { label: "E-mail", required: "" },
-              model: {
-                value: _vm.credential.username,
-                callback: function($$v) {
-                  _vm.$set(_vm.credential, "username", $$v)
-                },
-                expression: "credential.username"
-              }
-            }),
-            _vm._v(" "),
-            _c("v-text-field", {
-              staticClass: "input-group--focused",
-              attrs: { type: "password" },
-              model: {
-                value: _vm.credential.password,
-                callback: function($$v) {
-                  _vm.$set(_vm.credential, "password", $$v)
-                },
-                expression: "credential.password"
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "v-btn",
-              { attrs: { color: "success" }, on: { click: _vm.doLogin } },
-              [_vm._v("\n                Login\n            ")]
-            )
-          ],
-          1
-        )
-      ])
+      _c(
+        "v-card-text",
+        [
+          _c(
+            "v-form",
+            { attrs: { "lazy-validation": "" }, on: { submit: _vm.doLogin } },
+            [
+              _c("v-text-field", {
+                attrs: { label: "E-mail", required: "" },
+                model: {
+                  value: _vm.credential.username,
+                  callback: function($$v) {
+                    _vm.$set(_vm.credential, "username", $$v)
+                  },
+                  expression: "credential.username"
+                }
+              }),
+              _vm._v(" "),
+              _c("v-text-field", {
+                staticClass: "input-group--focused",
+                attrs: { type: "password" },
+                model: {
+                  value: _vm.credential.password,
+                  callback: function($$v) {
+                    _vm.$set(_vm.credential, "password", $$v)
+                  },
+                  expression: "credential.password"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                { attrs: { color: "success" }, on: { click: _vm.doLogin } },
+                [_vm._v("\n                Login\n            ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -74633,6 +74661,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_confirm__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify-confirm */ "./node_modules/vuetify-confirm/dist/vuetify-confirm.js");
 /* harmony import */ var vuetify_confirm__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vuetify_confirm__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _apiService__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./apiService */ "./resources/js/apiService.js");
+/* harmony import */ var vue_axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-axios */ "./node_modules/vue-axios/dist/vue-axios.min.js");
+/* harmony import */ var vue_axios__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_axios__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -74645,16 +74676,14 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuetify__WEBPACK_IMPORTED_MODULE_2___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuetify_confirm__WEBPACK_IMPORTED_MODULE_7___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.$http = _apiService__WEBPACK_IMPORTED_MODULE_8__["default"];
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_axios__WEBPACK_IMPORTED_MODULE_9___default.a, _apiService__WEBPACK_IMPORTED_MODULE_8__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('login-form', __webpack_require__(/*! ./components/misc/Login.vue */ "./resources/js/components/misc/Login.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('wk-snackbar', _components_html_utils_winkelSnackbar_vue__WEBPACK_IMPORTED_MODULE_6__["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: _routes__WEBPACK_IMPORTED_MODULE_4__["routes"]
 });
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
-  components: {
-    wkSnackbar: _components_html_utils_winkelSnackbar_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
-  },
   router: router,
   store: _store_store__WEBPACK_IMPORTED_MODULE_5__["store"],
   data: function data() {
@@ -75166,6 +75195,7 @@ var state = {
 };
 var mutations = {
   showSnackbar: function showSnackbar(state, payload) {
+    console.log('testtttt');
     state.text = payload.text;
     state.color = payload.color;
     state.multiline = payload.text.length > 50 ? true : false;

@@ -15,6 +15,7 @@
 <body>
 
     <div id="app">
+    <wk-snackbar></wk-snackbar>
         @yield('content')
     </div>
 

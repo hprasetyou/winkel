@@ -8,26 +8,26 @@ import { store } from './store/store'
 import wkSnackbar from './components/html/utils/winkelSnackbar.vue';
 import VuetifyConfirm from 'vuetify-confirm';
 import apiService from './apiService';
+import VueAxios from 'vue-axios'
+
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(VuetifyConfirm);
 
-Vue.$http = apiService;
+Vue.use(VueAxios, apiService)
 
 Vue.component(
   'login-form',
   require('./components/misc/Login.vue').default
 );
+Vue.component('wk-snackbar',wkSnackbar);
 
 const router = new VueRouter({
     routes
   })
 const app = new Vue({
     el: '#app',
-    components:{
-      wkSnackbar
-    },
     router,
     store,
     data() {

@@ -7,6 +7,8 @@ const state = {
   }
 const mutations = {
     showSnackbar(state, payload) {
+      console.log('testtttt');
+      
         
       state.text = payload.text
       state.color = payload.color
