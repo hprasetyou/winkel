@@ -66,7 +66,7 @@ const app = new Vue({
       ...mapMutations(['setActiveStores']),
       setStore(val){
         this.setActiveStores({activeStore:val});
-        
+        location.reload();
       },
       logOut(){
         store.commit('updateToken',{

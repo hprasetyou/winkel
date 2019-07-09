@@ -14,7 +14,12 @@ class ProductController extends ResourceController
      */
     protected function prepareStoreData(Request $request, int $id = null){
         $data = parent::prepareStoreData($request, $id);
-        $data->store_id = 1;
+        $data->store_id = $request->header('Active-Store');
+        return $data;
+    }
+    protected function prepareData(Request $request){
+        $data = parent::prepareData($request);
+        $data->where('store_id','=',$request->header('Active-Store'));
         return $data;
     }
 }

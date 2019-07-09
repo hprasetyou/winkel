@@ -7,7 +7,8 @@ const headers = {
 const makeRequest = function(token = false){
     if(!token){
         if(store.getters.hasToken){
-            headers.Authorization = store.getters.getToken;    
+            headers['Authorization'] = store.getters.getToken;
+            headers['Active-Store'] = store.getters.getActiveStore;    
         }
     }else{
         headers.Authorization = store.getters.getToken;

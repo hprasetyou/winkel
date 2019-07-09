@@ -77034,7 +77034,8 @@ var makeRequest = function makeRequest() {
 
   if (!token) {
     if (_store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.hasToken) {
-      headers.Authorization = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getToken;
+      headers['Authorization'] = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getToken;
+      headers['Active-Store'] = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getActiveStore;
     }
   } else {
     headers.Authorization = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getToken;
@@ -77135,6 +77136,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       this.setActiveStores({
         activeStore: val
       });
+      location.reload();
     },
     logOut: function logOut() {
       _store_store__WEBPACK_IMPORTED_MODULE_5__["store"].commit('updateToken', {
@@ -77732,10 +77734,13 @@ var getters = {
     var selectedStore = state.store.filter(function (store) {
       return store.id == activeStore;
     });
-    console.log(selectedStore);
 
     if (!activeStore || selectedStore.length < 1) {
-      activeStore = state.store[0].id;
+      if (state.store.length > 0) {
+        activeStore = state.store[0].id;
+      } else {
+        activeStore = false;
+      }
     }
 
     return activeStore;

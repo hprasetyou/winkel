@@ -22,10 +22,13 @@ const getters = {
     getActiveStore(state) {
         let activeStore = state.activeStore
         const selectedStore = state.store.filter(store => store.id == activeStore);
-        console.log(selectedStore);
         
         if(!activeStore || selectedStore.length < 1){
-            activeStore = state.store[0].id
+            if(state.store.length > 0){
+                activeStore = state.store[0].id
+            }else{
+                activeStore = false
+            }
         }
         return activeStore;
     }

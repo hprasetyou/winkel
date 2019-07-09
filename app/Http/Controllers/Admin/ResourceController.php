@@ -16,8 +16,8 @@ class ResourceController extends Controller
         $this->model = 'App\\' . ucfirst($objName);
     }
 
-    protected function prepareData(){
-        $data = DB::table($this->tbName,2);
+    protected function prepareData(Request $request){
+        $data = DB::table($this->tbName);
         return $data;
     }
     private function decamelize($string) {
@@ -34,7 +34,7 @@ class ResourceController extends Controller
         $perpage = $request->query('perpage')?$request->query('perpage'):15;
         $orderCol = $request->query('sortby')?$request->query('sortby'):'id';
         $orderDirection = $request->query('descending') == 'true'?'desc':'asc';
-        $data = $this->prepareData()->orderBy($orderCol,$orderDirection)->paginate($perpage);
+        $data = $this->prepareData($request)->orderBy($orderCol,$orderDirection)->paginate($perpage);
         return $data->toJson(JSON_PRETTY_PRINT);
     }
 
