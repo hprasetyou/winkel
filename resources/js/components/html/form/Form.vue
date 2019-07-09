@@ -6,7 +6,7 @@
             <v-btn color="" @click="$router.push(baseUrl)">
                 Back
             </v-btn>
-            <v-btn color="error" @click="deleteConfirmation">
+            <v-btn color="error" v-if="!isNew" @click="deleteConfirmation">
                 Delete
             </v-btn>
             <v-btn color="primary" @click="editMode = !editMode">{{ editMode?'Cancel':'Edit' }}</v-btn>
@@ -49,6 +49,7 @@
         data() {
             return {
                 editMode: false,
+                isNew: false,
                 formDefinition: [],
                 dataUrl: '',
                 data: {},
@@ -61,7 +62,12 @@
             this.dataUrl = this.$route.meta.dataUrl
             this.title = this.$route.meta.title;
             this.baseUrl = this.$route.meta.baseUrl;
-            this.getData();
+            if(this.$route.params.id == 'new'){
+                this.editMode = true;
+                this.isNew = true;
+            }else{
+                this.getData();
+            }
         },
         methods: {
             ...mapMutations(["showSnackbar", "closeSnackbar"]),
@@ -75,14 +81,23 @@
                     })
             },
             saveData() {
-                this.axios.put(`${this.dataUrl}/${this.$route.params.id}`, this.data)
-                    .then(response =>{
+                let action = false;
+                if(this.isNew){
+                    action = this.axios.post(`${this.dataUrl}`, this.data)
+                }else{
+                    action = this.axios.put(`${this.dataUrl}/${this.$route.params.id}`, this.data)
+                }
+                    action.then(response =>{
                         this.data = response.data;
                         this.openSnackbar({
                             text:"All changes saved!",
                             color: "success"
                         })
                         this.editMode = false;
+                        if(this.isNew){
+                            this.isNew = false;
+                            this.$router.push(`${this.baseUrl}/${response.data.id}`)
+                        }
                     }).catch(err => {
                         this.openSnackbar({
                             text:"An error has occured",

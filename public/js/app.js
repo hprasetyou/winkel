@@ -1801,6 +1801,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       editMode: false,
+      isNew: false,
       formDefinition: [],
       dataUrl: '',
       data: {},
@@ -1813,7 +1814,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.dataUrl = this.$route.meta.dataUrl;
     this.title = this.$route.meta.title;
     this.baseUrl = this.$route.meta.baseUrl;
-    this.getData();
+
+    if (this.$route.params.id == 'new') {
+      this.editMode = true;
+      this.isNew = true;
+    } else {
+      this.getData();
+    }
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])(["showSnackbar", "closeSnackbar"]), {
     openSnackbar: function openSnackbar(options) {
@@ -1829,7 +1836,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     saveData: function saveData() {
       var _this2 = this;
 
-      this.axios.put("".concat(this.dataUrl, "/").concat(this.$route.params.id), this.data).then(function (response) {
+      var action = false;
+
+      if (this.isNew) {
+        action = this.axios.post("".concat(this.dataUrl), this.data);
+      } else {
+        action = this.axios.put("".concat(this.dataUrl, "/").concat(this.$route.params.id), this.data);
+      }
+
+      action.then(function (response) {
         _this2.data = response.data;
 
         _this2.openSnackbar({
@@ -1838,6 +1853,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
 
         _this2.editMode = false;
+
+        if (_this2.isNew) {
+          _this2.isNew = false;
+
+          _this2.$router.push("".concat(_this2.baseUrl, "/").concat(response.data.id));
+        }
       })["catch"](function (err) {
         _this2.openSnackbar({
           text: "An error has occured",
@@ -6786,14 +6807,16 @@ var render = function() {
             [_vm._v("\n            Back\n        ")]
           ),
           _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              attrs: { color: "error" },
-              on: { click: _vm.deleteConfirmation }
-            },
-            [_vm._v("\n            Delete\n        ")]
-          ),
+          !_vm.isNew
+            ? _c(
+                "v-btn",
+                {
+                  attrs: { color: "error" },
+                  on: { click: _vm.deleteConfirmation }
+                },
+                [_vm._v("\n            Delete\n        ")]
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "v-btn",

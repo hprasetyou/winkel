@@ -17,7 +17,7 @@ for (const key in resConf) {
             path: `/${key}/:id`,
             component: FormComponent,
             meta
-        })       
+        })    
     }
 }
 
