@@ -7,6 +7,13 @@
             <v-toolbar color="indigo" dark fixed app>
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 <v-toolbar-title>Application</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-flex xs2>
+                    <v-select
+                        :value="getActiveStore"
+                        @change="setStore"
+                        :items="getStore"></v-select>
+                </v-flex>
             </v-toolbar>
             <v-content>
                 <v-container fluid fill-height>

@@ -14,8 +14,8 @@ import VueAxios from 'vue-axios'
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(VuetifyConfirm);
-
-Vue.use(VueAxios, apiService)
+const mApiService = new apiService();
+Vue.use(VueAxios, mApiService)
 
 Vue.component(
   'login-form',
@@ -39,6 +39,10 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+import {
+  mapGetters,
+  mapMutations
+} from "vuex";
 const app = new Vue({
     el: '#app',
     router,
@@ -55,11 +59,20 @@ const app = new Vue({
             right: null
         }
     },
+    computed:{
+      ...mapGetters(['getStore','getActiveStore'])
+    },
     methods: {
+      ...mapMutations(['setActiveStores']),
+      setStore(val){
+        this.setActiveStores({activeStore:val});
+        
+      },
       logOut(){
         store.commit('updateToken',{
           token:''
         })
+        store.commit('clearStoreData')
         window.location = '/login';
       }
     },

@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import snackbar from './module/snackbar';
 import token from './module/token';
+import moduleStore from './module/store';
 import VuexPersistence from 'vuex-persist'
 
 const vuexLocal = new VuexPersistence({
@@ -14,7 +15,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     modules:{
         snackbar,
-        token
+        token,
+        store:moduleStore
     },
     plugins: [vuexLocal.plugin]
 })

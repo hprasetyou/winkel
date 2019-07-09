@@ -2065,8 +2065,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       credential: {}
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["hasToken", "getToken"])),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(["showSnackbar", "closeSnackbar", "updateToken"]), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["hasToken", "getToken", "getStore"])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])(["showSnackbar", "closeSnackbar", "updateToken"]), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["getStoreFromApi"]), {
     openSnackbar: function openSnackbar(options) {
       this.showSnackbar(options);
     },
@@ -2086,6 +2086,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.updateToken({
           token: token
         });
+
+        _this.getStoreFromApi();
 
         window.location = '/dashboard';
       })["catch"](function (e) {
@@ -77027,14 +77029,23 @@ var headers = {
   'Accept': 'application/json'
 };
 
-if (_store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.hasToken) {
-  headers.Authorization = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getToken;
-  console.log(headers);
-}
+var makeRequest = function makeRequest() {
+  var token = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-/* harmony default export */ __webpack_exports__["default"] = (axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-  headers: headers
-}));
+  if (!token) {
+    if (_store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.hasToken) {
+      headers.Authorization = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getToken;
+    }
+  } else {
+    headers.Authorization = _store_store__WEBPACK_IMPORTED_MODULE_1__["store"].getters.getToken;
+  }
+
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
+    headers: headers
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (makeRequest);
 
 /***/ }),
 
@@ -77062,6 +77073,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _apiService__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./apiService */ "./resources/js/apiService.js");
 /* harmony import */ var vue_axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-axios */ "./node_modules/vue-axios/dist/vue-axios.min.js");
 /* harmony import */ var vue_axios__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_axios__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -77075,7 +77091,8 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuetify__WEBPACK_IMPORTED_MODULE_2___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuetify_confirm__WEBPACK_IMPORTED_MODULE_7___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_axios__WEBPACK_IMPORTED_MODULE_9___default.a, _apiService__WEBPACK_IMPORTED_MODULE_8__["default"]);
+var mApiService = new _apiService__WEBPACK_IMPORTED_MODULE_8__["default"]();
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_axios__WEBPACK_IMPORTED_MODULE_9___default.a, mApiService);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('login-form', __webpack_require__(/*! ./components/misc/Login.vue */ "./resources/js/components/misc/Login.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('wk-snackbar', _components_html_utils_winkelSnackbar_vue__WEBPACK_IMPORTED_MODULE_6__["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
@@ -77092,6 +77109,7 @@ router.beforeEach(function (to, from, next) {
     next();
   }
 });
+
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   router: router,
@@ -77111,14 +77129,21 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       right: null
     };
   },
-  methods: {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_10__["mapGetters"])(['getStore', 'getActiveStore'])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_10__["mapMutations"])(['setActiveStores']), {
+    setStore: function setStore(val) {
+      this.setActiveStores({
+        activeStore: val
+      });
+    },
     logOut: function logOut() {
       _store_store__WEBPACK_IMPORTED_MODULE_5__["store"].commit('updateToken', {
         token: ''
       });
+      _store_store__WEBPACK_IMPORTED_MODULE_5__["store"].commit('clearStoreData');
       window.location = '/login';
     }
-  }
+  })
 });
 
 /***/ }),
@@ -77666,6 +77691,75 @@ var mutations = {
 
 /***/ }),
 
+/***/ "./resources/js/store/module/store.js":
+/*!********************************************!*\
+  !*** ./resources/js/store/module/store.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _apiService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../apiService */ "./resources/js/apiService.js");
+
+var state = {
+  activeStore: false,
+  store: []
+};
+var mutations = {
+  setStores: function setStores(state, payload) {
+    state.store = payload.store;
+  },
+  setActiveStores: function setActiveStores(state, payload) {
+    state.activeStore = payload.activeStore;
+  },
+  clearStoreData: function clearStoreData(state) {
+    state.activeStore = false;
+    state.store = [];
+  }
+};
+var getters = {
+  getStore: function getStore(state) {
+    return state.store.map(function (item) {
+      return {
+        value: item.id,
+        text: item.name
+      };
+    });
+  },
+  getActiveStore: function getActiveStore(state) {
+    var activeStore = state.activeStore;
+    var selectedStore = state.store.filter(function (store) {
+      return store.id == activeStore;
+    });
+    console.log(selectedStore);
+
+    if (!activeStore || selectedStore.length < 1) {
+      activeStore = state.store[0].id;
+    }
+
+    return activeStore;
+  }
+};
+var actions = {
+  getStoreFromApi: function getStoreFromApi(context) {
+    var mApiService = new _apiService__WEBPACK_IMPORTED_MODULE_0__["default"](context.getters.getToken);
+    mApiService.get("/api/store").then(function (o) {
+      context.commit('setStores', {
+        store: o.data.data
+      });
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: state,
+  mutations: mutations,
+  actions: actions,
+  getters: getters
+});
+
+/***/ }),
+
 /***/ "./resources/js/store/module/token.js":
 /*!********************************************!*\
   !*** ./resources/js/store/module/token.js ***!
@@ -77714,13 +77808,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _module_snackbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./module/snackbar */ "./resources/js/store/module/snackbar.js");
 /* harmony import */ var _module_token__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./module/token */ "./resources/js/store/module/token.js");
-/* harmony import */ var vuex_persist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex-persist */ "./node_modules/vuex-persist/dist/esm/index.js");
+/* harmony import */ var _module_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./module/store */ "./resources/js/store/module/store.js");
+/* harmony import */ var vuex_persist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex-persist */ "./node_modules/vuex-persist/dist/esm/index.js");
 
 
 
 
 
-var vuexLocal = new vuex_persist__WEBPACK_IMPORTED_MODULE_4__["default"]({
+
+var vuexLocal = new vuex_persist__WEBPACK_IMPORTED_MODULE_5__["default"]({
   key: 'vuex',
   // The key to store the state on in the storage provider.
   storage: window.localStorage
@@ -77729,7 +77825,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     snackbar: _module_snackbar__WEBPACK_IMPORTED_MODULE_2__["default"],
-    token: _module_token__WEBPACK_IMPORTED_MODULE_3__["default"]
+    token: _module_token__WEBPACK_IMPORTED_MODULE_3__["default"],
+    store: _module_store__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   plugins: [vuexLocal.plugin]
 });

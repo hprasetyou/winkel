@@ -15,7 +15,8 @@
     import * as config from '../../res/config';
     import {
         mapMutations,
-        mapGetters
+        mapGetters,
+        mapActions
     } from "vuex";
 
     export default {
@@ -25,10 +26,11 @@
             }
         },
         computed:{
-            ...mapGetters(["hasToken","getToken"])
+            ...mapGetters(["hasToken","getToken","getStore"])
         },
         methods: {
             ...mapMutations(["showSnackbar", "closeSnackbar","updateToken"]),
+            ...mapActions(["getStoreFromApi"]),
             openSnackbar(options) {
                 this.showSnackbar(options)
             },
@@ -44,6 +46,7 @@
                 }).then(o => {
                     const token = o.data.access_token;
                     this.updateToken({token});
+                    this.getStoreFromApi();
                     window.location = '/dashboard';
                 }).catch(e => {                    
                     this.openSnackbar({
