@@ -77530,7 +77530,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "API_CLIENT_ID", function() { return API_CLIENT_ID; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "API_CLIENT_SECRET", function() { return API_CLIENT_SECRET; });
 var API_CLIENT_ID = '2';
-var API_CLIENT_SECRET = 'jQ1U0MoxdGeWzQr4oy7Al4O3rpnroIgeIVw2ZdOg';
+var API_CLIENT_SECRET = 'hotEPrIX1xx74KNbsaavIKNzkJGbshPxKsR00giF';
 
 /***/ }),
 
