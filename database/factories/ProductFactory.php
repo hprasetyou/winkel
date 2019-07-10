@@ -17,7 +17,8 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(Product::class, function (Faker $faker) {
+    $faker->addProvider(new \Faker\Provider\Lorem($faker));
     return [
-        'name' => $faker->name
+        'name' => $faker->sentence(2,true)
     ];
 });

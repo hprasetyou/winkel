@@ -17,7 +17,8 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(Store::class, function (Faker $faker) {
+    $faker->addProvider(new \Faker\Provider\en_US\Company($faker));
     return [
-        'name' => $faker->name
+        'name' => $faker->company
     ];
 });

@@ -28,7 +28,9 @@ class Store extends Model
         $store = parent::save();
         if($store){
             $user = request()->user();
-            $this->users()->attach($user->id);
+            if($user){
+                $this->users()->attach($user->id);
+            }
         }
         return $store;
     }
