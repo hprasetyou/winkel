@@ -1,8 +1,9 @@
 import ListComponent from './components/html/List.vue';
-import FormComponent from './components/html/form/Form.vue';
+import DetailComponent from './components/html/Detail.vue';
 import resConf from './res/resource-definition';
 
-const routes = [];
+let routes = [];
+
 
 for (const key in resConf) {
     if (resConf.hasOwnProperty(key)) {
@@ -15,11 +16,10 @@ for (const key in resConf) {
         })
         routes.push({
             path: `/${key}/:id`,
-            component: FormComponent,
+            component: DetailComponent,
             meta
         })    
     }
 }
-
 
 export { routes }

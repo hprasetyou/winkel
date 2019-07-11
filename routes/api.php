@@ -20,6 +20,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::resources([
         '/user' => 'Admin\UserController',
         '/store' => 'Admin\StoreController',
-        '/product' => 'Admin\ProductController'
+        '/product' => 'Admin\ProductController',
+        '/sale' => 'Admin\SaleController'
     ]);
 });
