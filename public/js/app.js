@@ -7012,8 +7012,9 @@ var render = function() {
                                         {
                                           name: "show",
                                           rawName: "v-show",
-                                          value: _vm.editMode,
-                                          expression: "editMode"
+                                          value: _vm.editMode && !item.readOnly,
+                                          expression:
+                                            "editMode && !item.readOnly"
                                         }
                                       ],
                                       attrs: {
@@ -7036,8 +7037,10 @@ var render = function() {
                                           {
                                             name: "show",
                                             rawName: "v-show",
-                                            value: !_vm.editMode,
-                                            expression: "!editMode"
+                                            value:
+                                              !_vm.editMode || item.readOnly,
+                                            expression:
+                                              "!editMode || item.readOnly"
                                           }
                                         ],
                                         attrs: { row: "", wrap: "" }
@@ -77842,6 +77845,9 @@ __webpack_require__.r(__webpack_exports__);
       align: 'left',
       value: 'id'
     }, {
+      text: 'Total',
+      value: 'total'
+    }, {
       text: 'Created At',
       value: 'created_at'
     }, {
@@ -77852,7 +77858,8 @@ __webpack_require__.r(__webpack_exports__);
       left: [{
         label: 'ID',
         model: 'id',
-        type: 'input'
+        type: 'input',
+        readOnly: true
       }],
       child: [{
         label: 'Items',

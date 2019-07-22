@@ -23,10 +23,10 @@
                         <v-flex xs6 px-2 v-for="(group, g) in ['left','right']" :key="g">
                             <template v-if="formDefinition[group]">
                                 <div v-for="(item,i) in formDefinition[group]" :key="i">
-                                    <v-text-field v-show="editMode" :label="item.label" v-model="data[item.model]"
+                                    <v-text-field v-show="editMode && !item.readOnly" :label="item.label" v-model="data[item.model]"
                                         required>
                                     </v-text-field>
-                                    <v-layout row wrap v-show="!editMode">
+                                    <v-layout row wrap v-show="!editMode || item.readOnly">
                                         <v-flex xs3>
                                             <label for="">{{ item.label }}</label>
                                         </v-flex>

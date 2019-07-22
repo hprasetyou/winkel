@@ -107,6 +107,10 @@ export default {
             value: 'id'
         },
         {
+            text: 'Total',
+            value: 'total'
+        },
+        {
             text: 'Created At',
             value: 'created_at'
         },
@@ -119,7 +123,8 @@ export default {
                 {
                     label:'ID',
                     model:'id',
-                    type:'input'
+                    type:'input',
+                    readOnly:true
                 }
             ],
             child:[
