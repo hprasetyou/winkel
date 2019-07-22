@@ -117,9 +117,38 @@ export default {
         formDefinition:{
             left:[
                 {
-                    label:'Name',
-                    model:'name',
+                    label:'ID',
+                    model:'id',
                     type:'input'
+                }
+            ],
+            child:[
+                {
+                    label:'Items',
+                    model:'sales_items',
+                    header:[{
+                        text: 'ID',
+                        align: 'left',
+                        value: 'id'
+                    },{
+                        text: 'Product',
+                        value: 'product.name'
+                    },{
+                        text: 'Price',
+                        value: 'item_price'
+                    },{
+                        text: 'Qty',
+                        value: 'qty'
+                    },{
+                        text: 'Total',
+                        value: 'total'
+                    },{
+                        text: 'Created At',
+                        value: 'created_at'
+                    },{
+                        text: 'Updated At',
+                        value: 'updated_at'
+                    }],
                 }
             ]
         },

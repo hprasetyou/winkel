@@ -78,6 +78,10 @@ class ResourceController extends Controller
         return $obj;
     }
 
+    protected function prepareShowData(Request $request, $id){
+        return $this->model::find($id);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -85,7 +89,7 @@ class ResourceController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $data = $this->model::find($id);
+        $data = $this->prepareShowData($request, $id);
         return $data->toJson(JSON_PRETTY_PRINT);
     }
 

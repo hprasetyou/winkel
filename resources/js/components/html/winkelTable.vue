@@ -1,12 +1,5 @@
 <template>
     <div>
-        <v-layout row>
-            <h3>{{ title }}</h3>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" :to="`${this.$route.path}/new`">New</v-btn>
-        </v-layout>
-        <v-divider></v-divider>
-        <br>
         <v-data-table v-model="selected" select-all :headers="headers" :items="tableData" :pagination.sync="pagination"
         :rows-per-page-items="[15,30,50]"
             :total-items="totalItem" :loading="loading" class="elevation-1">
@@ -14,7 +7,7 @@
                 <td>
                     <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
                 </td>
-                <td @click.stop.prevent="gotoDetail(props.item.id)" v-for="(header,i) in headers" :key="i">{{ props.item[header.value] }}</td>
+                <td @click.stop.prevent="clickCell(props.item.id)" v-for="(header,i) in headers" :key="i">{{ parseColValue(props.item, header.value) }}</td>
             </template>
         </v-data-table>
     </div>
@@ -27,10 +20,12 @@
                 type: Array
             },
             dataUrl: {
-                type: String
+                type: String,
+                default:''
             },
-            title: {
-                type: String
+            itemData: {
+                type: Array,
+                default: ()=>[]
             }
         },
         data() {
@@ -40,7 +35,7 @@
                 pagination: {},
                 totalItem: 0,
                 loading: true,
-                tableData: [],
+                tableData:[]
             }
         },
         watch: {
@@ -50,7 +45,14 @@
                 },
                 deep: true
             },
-            title: {
+            itemData:{
+                handler() {
+                    this.tableData = this.itemData
+                    console.log(this.tableData);
+                    
+                }
+            },
+            dataUrl: {
                 handler() {
                     this.getData()
                 },
@@ -67,8 +69,16 @@
             }
         },
         methods: {
-            gotoDetail(id){
-                this.$router.push(`${this.$route.path}/${id}`)
+            clickCell(id){
+                this.$emit('cellClick',{id})
+            },
+            parseColValue(colData,key){
+                const keys = key.split('.');
+                let o = colData;
+                for (const k of keys) {
+                    o = o[k];
+                }
+                return o
             },
             getDataFromApi() {
                 this.loading = true
@@ -100,11 +110,15 @@
                 })
             },
             getData(){
+                if(this.dataUrl.length >1){
                     this.getDataFromApi()
                         .then(data => {
                             this.tableData = data.items
                             this.totalItem = data.total
                         })
+                }else{
+                    this.loading = false;
+                }
 
             }
 

@@ -1730,6 +1730,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -1746,6 +1753,9 @@ __webpack_require__.r(__webpack_exports__);
     this.updateConf();
   },
   methods: {
+    cellClicked: function cellClicked(data) {
+      this.$router.push("".concat(this.$route.path, "/").concat(data.id));
+    },
     updateConf: function updateConf() {
       this.title = this.$route.meta.title;
       this.header = this.$route.meta.header;
@@ -1771,6 +1781,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _winkelTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../winkelTable */ "./resources/js/components/html/winkelTable.vue");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1820,8 +1831,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    winkelTable: _winkelTable__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   data: function data() {
     return {
       editMode: false,
@@ -1980,23 +2003,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     headers: {
       type: Array
     },
     dataUrl: {
-      type: String
+      type: String,
+      "default": ''
     },
-    title: {
-      type: String
+    itemData: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
     }
   },
   data: function data() {
@@ -2016,7 +2036,13 @@ __webpack_require__.r(__webpack_exports__);
       },
       deep: true
     },
-    title: {
+    itemData: {
+      handler: function handler() {
+        this.tableData = this.itemData;
+        console.log(this.tableData);
+      }
+    },
+    dataUrl: {
       handler: function handler() {
         this.getData();
       },
@@ -2030,8 +2056,39 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    gotoDetail: function gotoDetail(id) {
-      this.$router.push("".concat(this.$route.path, "/").concat(id));
+    clickCell: function clickCell(id) {
+      this.$emit('cellClick', {
+        id: id
+      });
+    },
+    parseColValue: function parseColValue(colData, key) {
+      var keys = key.split('.');
+      var o = colData;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var k = _step.value;
+          o = o[k];
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return o;
     },
     getDataFromApi: function getDataFromApi() {
       var _this = this;
@@ -2064,10 +2121,14 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this2 = this;
 
-      this.getDataFromApi().then(function (data) {
-        _this2.tableData = data.items;
-        _this2.totalItem = data.total;
-      });
+      if (this.dataUrl.length > 1) {
+        this.getDataFromApi().then(function (data) {
+          _this2.tableData = data.items;
+          _this2.totalItem = data.total;
+        });
+      } else {
+        this.loading = false;
+      }
     }
   }
 });
@@ -6802,8 +6863,30 @@ var render = function() {
   return _c(
     "div",
     [
+      _c(
+        "v-layout",
+        { attrs: { row: "" } },
+        [
+          _c("h3", [_vm._v(_vm._s(_vm.title))]),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            { attrs: { color: "primary", to: this.$route.path + "/new" } },
+            [_vm._v("New")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("v-divider"),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
       _c("winkle-table", {
-        attrs: { title: _vm.title, headers: _vm.header, dataUrl: _vm.dataUrl }
+        attrs: { headers: _vm.header, dataUrl: _vm.dataUrl },
+        on: { cellClick: _vm.cellClicked }
       })
     ],
     1
@@ -6835,74 +6918,77 @@ var render = function() {
     "div",
     [
       _c(
-        "v-layout",
-        { attrs: { row: "" } },
+        "v-form",
+        { ref: "form" },
         [
-          _c("h3", [_vm._v(_vm._s(_vm.title))]),
-          _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
           _c(
-            "v-btn",
-            {
-              attrs: { color: "" },
-              on: {
-                click: function($event) {
-                  return _vm.$router.push(_vm.baseUrl)
-                }
-              }
-            },
-            [_vm._v("\n            Back\n        ")]
-          ),
-          _vm._v(" "),
-          !_vm.isNew
-            ? _c(
+            "v-layout",
+            { attrs: { row: "" } },
+            [
+              _c("h3", [_vm._v(_vm._s(_vm.title))]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
                 "v-btn",
                 {
-                  attrs: { color: "error" },
-                  on: { click: _vm.deleteConfirmation }
+                  attrs: { color: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.push(_vm.baseUrl)
+                    }
+                  }
                 },
-                [_vm._v("\n            Delete\n        ")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              attrs: { color: "primary" },
-              on: {
-                click: function($event) {
-                  _vm.editMode = !_vm.editMode
-                }
-              }
-            },
-            [_vm._v(_vm._s(_vm.editMode ? "Cancel" : "Edit"))]
+                [_vm._v("\n                Back\n            ")]
+              ),
+              _vm._v(" "),
+              !_vm.isNew
+                ? _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "error" },
+                      on: { click: _vm.deleteConfirmation }
+                    },
+                    [_vm._v("\n                Delete\n            ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "primary" },
+                  on: {
+                    click: function($event) {
+                      _vm.editMode = !_vm.editMode
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.editMode ? "Cancel" : "Edit"))]
+              ),
+              _vm._v(" "),
+              _vm.editMode
+                ? _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "success" },
+                      on: { click: _vm.saveData }
+                    },
+                    [_vm._v("\n                Save\n            ")]
+                  )
+                : _vm._e()
+            ],
+            1
           ),
           _vm._v(" "),
-          _vm.editMode
-            ? _c(
-                "v-btn",
-                { attrs: { color: "success" }, on: { click: _vm.saveData } },
-                [_vm._v("\n            Save\n        ")]
-              )
-            : _vm._e()
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("v-divider"),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c(
-        "v-card",
-        [
+          _c("v-divider"),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
           _c(
-            "v-card-text",
+            "v-card",
             [
               _c(
-                "v-form",
-                { ref: "form" },
+                "v-card-text",
                 [
                   _c(
                     "v-layout",
@@ -6987,9 +7073,31 @@ var render = function() {
               )
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _vm._l(_vm.formDefinition.child, function(child, i) {
+            return _c(
+              "v-card",
+              { key: i },
+              [
+                _c("v-card-title", [_c("h3", [_vm._v(_vm._s(child.label))])]),
+                _vm._v(" "),
+                _c("v-divider"),
+                _vm._v(" "),
+                _c("winkel-table", {
+                  attrs: {
+                    headers: child.header,
+                    itemData: _vm.data.sales_items
+                  }
+                })
+              ],
+              1
+            )
+          })
         ],
-        1
+        2
       )
     ],
     1
@@ -7070,27 +7178,6 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-layout",
-        { attrs: { row: "" } },
-        [
-          _c("h3", [_vm._v(_vm._s(_vm.title))]),
-          _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            { attrs: { color: "primary", to: this.$route.path + "/new" } },
-            [_vm._v("New")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("v-divider"),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
       _c("v-data-table", {
         staticClass: "elevation-1",
         attrs: {
@@ -7138,11 +7225,15 @@ var render = function() {
                         click: function($event) {
                           $event.stopPropagation()
                           $event.preventDefault()
-                          return _vm.gotoDetail(props.item.id)
+                          return _vm.clickCell(props.item.id)
                         }
                       }
                     },
-                    [_vm._v(_vm._s(props.item[header.value]))]
+                    [
+                      _vm._v(
+                        _vm._s(_vm.parseColValue(props.item, header.value))
+                      )
+                    ]
                   )
                 })
               ]
@@ -77759,9 +77850,36 @@ __webpack_require__.r(__webpack_exports__);
     }],
     formDefinition: {
       left: [{
-        label: 'Name',
-        model: 'name',
+        label: 'ID',
+        model: 'id',
         type: 'input'
+      }],
+      child: [{
+        label: 'Items',
+        model: 'sales_items',
+        header: [{
+          text: 'ID',
+          align: 'left',
+          value: 'id'
+        }, {
+          text: 'Product',
+          value: 'product.name'
+        }, {
+          text: 'Price',
+          value: 'item_price'
+        }, {
+          text: 'Qty',
+          value: 'qty'
+        }, {
+          text: 'Total',
+          value: 'total'
+        }, {
+          text: 'Created At',
+          value: 'created_at'
+        }, {
+          text: 'Updated At',
+          value: 'updated_at'
+        }]
       }]
     },
     dataUrl: '/api/sale'
