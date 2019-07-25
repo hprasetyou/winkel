@@ -1,13 +1,13 @@
 <template>
     <div>
-        <v-layout row>
+        <v-layout row pa-3>
             <h3>{{ title }}</h3>
             <v-spacer></v-spacer>
             <v-btn color="primary" :to="`${this.$route.path}/new`">New</v-btn>
         </v-layout>
         <v-divider></v-divider>
         <br>
-       <winkle-table @cellClick="cellClicked" :headers="header" :dataUrl="dataUrl">
+       <winkle-table @editRow="cellClicked" :headers="header" :dataUrl="dataUrl">
        </winkle-table>
        
     </div>

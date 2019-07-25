@@ -16,6 +16,7 @@ Vue.use(VueRouter);
 Vue.use(VuetifyConfirm);
 const mApiService = new apiService();
 Vue.use(VueAxios, mApiService)
+const vuetifyOptions = { }
 
 Vue.component(
   'login-form',
@@ -47,6 +48,7 @@ const app = new Vue({
     el: '#app',
     router,
     store,
+    vuetify: new Vuetify(vuetifyOptions),
     data() {
         return {
             message: 'Hello',

@@ -1,6 +1,19 @@
 <template>
     <winkel-form :formDefinition="formDefinition" :dataUrl="dataUrl" :baseUrl="baseUrl" :title="title">
-
+        <template v-slot:afterChilds>
+            <v-card>
+                <v-card-text>
+                    <v-simple-table>
+                        <tbody>
+                        <tr >
+                            <td colspan="5">Total</td>
+                            <td>5000</td>
+                        </tr>
+                        </tbody>
+                    </v-simple-table>
+                </v-card-text>
+            </v-card>
+        </template>
     </winkel-form>
 </template>
 <script>

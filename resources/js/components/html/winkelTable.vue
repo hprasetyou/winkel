@@ -1,14 +1,23 @@
 <template>
     <div>
-        <v-data-table :hide-actions="hideAction" v-model="selected" select-all :headers="headers" :items="tableData" :pagination.sync="pagination"
-        :rows-per-page-items="[15,30,50]"
-            :total-items="totalItem" :loading="loading" class="elevation-1">
-            <template v-slot:items="props">
-                <td>
-                    <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
-                </td>
-                <td @click.stop.prevent="clickCell(props.item.id)" v-for="(header,i) in headers" :key="i">{{ parseColValue(props.item, header.value) }}</td>
-            </template>
+        <v-data-table :hide-default-footer="hideAction" v-model="selected" show-select :headers="tableHeader" :items="tableData" :options.sync="pagination"
+        :footer-props="{'items-per-page-options':[15,30,50]}"
+            :server-items-length="totalItem" :loading="loading" class="elevation-1">
+                <template v-slot:item.action="{ item }">
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="editRow(item)"
+                    >
+                        edit
+                    </v-icon>
+                    <v-icon
+                        small
+                        @click="deleteRow(item)"
+                    >
+                        delete
+                    </v-icon>
+                </template>
         </v-data-table>
     </div>
 </template>
@@ -68,11 +77,23 @@
                 ) return 0
 
                 return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+            },
+            tableHeader(){
+                const header = this.headers;
+                const actionHeader = header.filter(item=>item.value == 'action');
+                if(!actionHeader.length>0){
+                    header.push({ text: 'Actions', value: 'action', sortable: false })
+                }
+                console.log(header);
+                return header;
             }
         },
         methods: {
-            clickCell(id){
-                this.$emit('cellClick',{id})
+            editRow(data){
+                this.$emit('editRow',data)
+            },
+            deleteRow(data){
+                this.$emit('deleteRow',data)
             },
             parseColValue(colData,key){
                 const keys = key.split('.');

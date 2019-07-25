@@ -132,10 +132,6 @@ export default {
                     label:'Items',
                     model:'sales_items',
                     header:[{
-                        text: 'ID',
-                        align: 'left',
-                        value: 'id'
-                    },{
                         text: 'Product',
                         value: 'product.name'
                     },{

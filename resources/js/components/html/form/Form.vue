@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-form ref="form">
-            <v-layout row>
+            <v-layout row pa-3>
                 <h3>{{ title }}</h3>
                 <v-spacer></v-spacer>
                 <v-btn color="" @click="$router.push(baseUrl)">
@@ -26,7 +26,7 @@
                                     <v-text-field v-show="editMode && !item.readOnly" :label="item.label" v-model="data[item.model]"
                                         required>
                                     </v-text-field>
-                                    <v-layout row wrap v-show="!editMode || item.readOnly">
+                                    <v-layout row px-3 wrap v-show="!editMode || item.readOnly">
                                         <v-flex xs3>
                                             <label for="">{{ item.label }}</label>
                                         </v-flex>
@@ -43,10 +43,10 @@
             <br>
             <v-card  v-for="(child, i) in formDefinition.child" :key="i">
                 <v-card-title>
-                    <h3>{{ child.label }}</h3>
+                    <span>{{ child.label }}</span>
                 </v-card-title>
                 <v-divider></v-divider>
-                <winkel-table :hideAction="true" :headers="child.header" :itemData="data.sales_items" />
+                <winkel-simple-table :hideAction="true" :headers="child.header" :itemData="data.sales_items" />
             </v-card>
             <br/>
             <slot name="afterChilds"></slot>
@@ -57,10 +57,10 @@
     import {
         mapMutations
     } from "vuex";
-    import winkelTable from '../winkelTable';
+    import winkelSimpleTable from '../simpleTable';
     export default {
         components: {
-            winkelTable
+            winkelSimpleTable
         },
         props:{
             formDefinition:{

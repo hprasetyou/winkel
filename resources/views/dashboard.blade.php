@@ -4,8 +4,8 @@
 @section('content')
         <v-app id="inspire">
             @include('layouts.partial.navigation')
-            <v-toolbar color="indigo" dark fixed app>
-                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-app-bar app color="indigo" dark>
+                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
                 <v-toolbar-title>Application</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-flex xs2>
@@ -14,7 +14,7 @@
                         @change="setStore"
                         :items="getStore"></v-select>
                 </v-flex>
-            </v-toolbar>
+            </v-app-bar>
             <v-content>
                 <v-container fluid fill-height>
                     <v-layout column>
