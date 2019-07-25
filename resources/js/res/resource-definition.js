@@ -147,12 +147,6 @@ export default {
                     },{
                         text: 'Total',
                         value: 'total'
-                    },{
-                        text: 'Created At',
-                        value: 'created_at'
-                    },{
-                        text: 'Updated At',
-                        value: 'updated_at'
                     }],
                 }
             ]

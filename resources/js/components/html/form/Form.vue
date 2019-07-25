@@ -46,8 +46,10 @@
                     <h3>{{ child.label }}</h3>
                 </v-card-title>
                 <v-divider></v-divider>
-                <winkel-table :headers="child.header" :itemData="data.sales_items" />
+                <winkel-table :hideAction="true" :headers="child.header" :itemData="data.sales_items" />
             </v-card>
+            <br/>
+            <slot name="afterChilds"></slot>
         </v-form>
     </div>
 </template>
@@ -60,27 +62,49 @@
         components: {
             winkelTable
         },
+        props:{
+            formDefinition:{
+                type:Object,
+                default(){
+                    return []
+                }
+            },
+            dataUrl:{
+                type:String
+            },
+            baseUrl:{
+                type:String
+            },
+            title:{
+                type:String
+            }
+        },
         data() {
             return {
                 editMode: false,
                 isNew: false,
-                formDefinition: [],
-                dataUrl: '',
-                data: {},
-                baseUrl: '',
-                title: ''
+                data:{}
             }
         },
         mounted() {
-            this.formDefinition = this.$route.meta.formDefinition
-            this.dataUrl = this.$route.meta.dataUrl
-            this.title = this.$route.meta.title;
-            this.baseUrl = this.$route.meta.baseUrl;
             if (this.$route.params.id == 'new') {
                 this.editMode = true;
                 this.isNew = true;
             } else {
                 this.getData();
+            }
+        },
+        watch: {
+            dataUrl: {
+                handler() {
+                    if (this.$route.params.id == 'new') {
+                        this.editMode = true;
+                        this.isNew = true;
+                    } else {
+                        this.getData();
+                    }
+                },
+                deep: true
             }
         },
         methods: {
@@ -89,10 +113,12 @@
                 this.showSnackbar(options)
             },
             getData() {
-                this.axios.get(`${this.dataUrl}/${this.$route.params.id}`)
-                    .then(response => {
-                        this.data = response.data;
-                    })
+                if(this.dataUrl.length > 4){
+                    this.axios.get(`${this.dataUrl}/${this.$route.params.id}`)
+                        .then(response => {
+                            this.data = response.data;
+                        })
+                }
             },
             saveData() {
                 let action = false;

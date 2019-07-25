@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table v-model="selected" select-all :headers="headers" :items="tableData" :pagination.sync="pagination"
+        <v-data-table :hide-actions="hideAction" v-model="selected" select-all :headers="headers" :items="tableData" :pagination.sync="pagination"
         :rows-per-page-items="[15,30,50]"
             :total-items="totalItem" :loading="loading" class="elevation-1">
             <template v-slot:items="props">
@@ -22,6 +22,10 @@
             dataUrl: {
                 type: String,
                 default:''
+            },
+            hideAction: {
+                type: Boolean,
+                default:false
             },
             itemData: {
                 type: Array,
@@ -47,9 +51,7 @@
             },
             itemData:{
                 handler() {
-                    this.tableData = this.itemData
-                    console.log(this.tableData);
-                    
+                    this.tableData = this.itemData;
                 }
             },
             dataUrl: {
