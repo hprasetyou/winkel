@@ -117,6 +117,7 @@
                     this.axios.get(`${this.dataUrl}/${this.$route.params.id}`)
                         .then(response => {
                             this.data = response.data;
+                            this.$emit('data-updated',response.data)
                         })
                 }
             },

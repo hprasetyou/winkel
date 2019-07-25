@@ -1,17 +1,18 @@
 <template>
-    <winkel-form :formDefinition="formDefinition" :dataUrl="dataUrl" :baseUrl="baseUrl" :title="title">
+    <winkel-form :formDefinition="formDefinition" @data-updated="onUpdated" :dataUrl="dataUrl" :baseUrl="baseUrl" :title="title">
         <template v-slot:afterChilds>
             <v-card>
-                <v-card-text>
                     <v-simple-table>
                         <tbody>
-                        <tr >
-                            <td colspan="5">Total</td>
-                            <td>5000</td>
+                        <tr>
+                            <td>Total</td>
+                            <td>{{ data.total }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         </tbody>
                     </v-simple-table>
-                </v-card-text>
             </v-card>
         </template>
     </winkel-form>
@@ -27,7 +28,13 @@ export default {
             formDefinition:{},
             dataUrl:'',
             baseUrl:'',
-            title:''
+            title:'',
+            data:{}
+        }
+    },
+    methods: {
+        onUpdated(data){
+            this.data = data;
         }
     },
     mounted() {        
