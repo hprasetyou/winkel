@@ -140,11 +140,12 @@ export default {
                     },{
                         text: 'Qty',
                         value: 'qty',
+                        type: 'number',
                         editable: true
                     },{
                         text: 'Total',
                         type: 'method',
-                        value: (item)=> item.qty * item.item_price,
+                        value: (item)=> item.total = item.qty * item.item_price,
                     }],
                 }
             ]

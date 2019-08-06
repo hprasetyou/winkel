@@ -48,7 +48,7 @@
                 </v-card-title>
                 <popupForm :dialog="child.dialog" />
                 <v-divider></v-divider>
-                <winkel-simple-table :hideAction="true" :headers="child.header" :itemData="data.sales_items" />
+                <winkel-simple-table :hideAction="true" :headers="child.header"  :editState="editMode" :itemData="data.sales_items" />
             </v-card>
             <br/>
             <slot name="afterChilds"></slot>

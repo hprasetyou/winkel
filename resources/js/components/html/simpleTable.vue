@@ -3,13 +3,13 @@
         <thead>
             <tr>
                 <th v-for="(header, i) in headers" :key="i" class="text-left">{{header.text}}</th>
-                <th>Action</th>
+                <th v-if="editState">Action</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(item,key) in itemData" :key="item.id">
-                <input-cell v-for="(header, i) in headers" :key="i" :data="item" :editable="header.editable" :rowKey="header.value" :type="header.type" :editState="item.editState"/>
-                <td>
+                <input-cell v-for="(header, i) in headers" :key="i" :data="item" :conf="header" :editState="item.editState"/>
+                <td v-if="editState">
                     <v-icon small class="mr-2" @click="clickEdit(key)">
                         edit
                     </v-icon>
@@ -33,13 +33,15 @@ import inputCell from './table/inputCell.vue';
             },
             itemData: {
                 type: Array
+            },
+            editState:{
+                type:Boolean,
+                default:false
             }
         },
         methods: {
             clickEdit(key){
-              this.$set(this.itemData[key],'editState',true);
-              console.log(this.itemData[key]);
-              
+              this.$set(this.itemData[key],'editState',!this.itemData[key].editState);              
             }
         },
     }
