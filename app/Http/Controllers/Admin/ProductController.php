@@ -18,7 +18,7 @@ class ProductController extends ResourceController
         return $data;
     }
     protected function prepareData(Request $request){
-        $data = parent::prepareData($request);
+        $data = $this->model::with('prices');
         $data->where('store_id','=',$request->header('Active-Store'));
         return $data;
     }

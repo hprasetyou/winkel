@@ -20,7 +20,7 @@
             <v-card>
                 <v-card-text>
                     <v-layout row wrap>
-                        <v-flex xs6 px-2 v-for="(group, g) in ['left','right']" :key="g">
+                        <v-flex lg4 xs12 px-3 v-for="(group, g) in ['left','center','right']" :key="g">
                             <template v-if="formDefinition[group]">
                                 <div v-for="(item,i) in formDefinition[group]" :key="i">
                                     <v-text-field v-show="editMode && !item.readOnly" :label="item.label" v-model="data[item.model]"
@@ -42,9 +42,11 @@
             </v-card>
             <br>
             <v-card  v-for="(child, i) in formDefinition.child" :key="i">
-                <v-card-title>
+                <v-card-title row>
                     <span>{{ child.label }}</span>
+                        <v-spacer></v-spacer>
                 </v-card-title>
+                <popupForm :dialog="child.dialog" />
                 <v-divider></v-divider>
                 <winkel-simple-table :hideAction="true" :headers="child.header" :itemData="data.sales_items" />
             </v-card>
@@ -58,9 +60,11 @@
         mapMutations
     } from "vuex";
     import winkelSimpleTable from '../simpleTable';
+    import popupForm from './popupForm.vue';
     export default {
         components: {
-            winkelSimpleTable
+            winkelSimpleTable,
+            popupForm
         },
         props:{
             formDefinition:{

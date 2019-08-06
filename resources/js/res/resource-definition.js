@@ -30,7 +30,7 @@ export default {
                     type:'input'
                 },
             ],
-            right:[
+            center:[
                 {
                     label:'Name',
                     model:'name',
@@ -133,16 +133,18 @@ export default {
                     model:'sales_items',
                     header:[{
                         text: 'Product',
-                        value: 'product.name'
+                        value: 'product.name',
                     },{
                         text: 'Price',
                         value: 'item_price'
                     },{
                         text: 'Qty',
-                        value: 'qty'
+                        value: 'qty',
+                        editable: true
                     },{
                         text: 'Total',
-                        value: 'total'
+                        type: 'method',
+                        value: (item)=> item.qty * item.item_price,
                     }],
                 }
             ]

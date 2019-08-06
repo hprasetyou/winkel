@@ -14,4 +14,8 @@ class Product extends Model
         return $this->belongsTo('\App\Store');
     }
 
+    public function prices(){
+        return $this->hasMany('\App\ProductPrice');
+    }
+
 }

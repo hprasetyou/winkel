@@ -1,36 +1,47 @@
 <template>
-  <v-simple-table>
-    <thead>
-      <tr>
-        <th v-for="(header, i) in headers" :key="i" class="text-left">{{header.text}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in itemData" :key="item.id">
-        <td v-for="(header, i) in headers" :key="i">{{ parseColValue(item,header.value) }}</td>
-      </tr>
-    </tbody>
-  </v-simple-table>
+    <v-simple-table>
+        <thead>
+            <tr>
+                <th v-for="(header, i) in headers" :key="i" class="text-left">{{header.text}}</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item,key) in itemData" :key="item.id">
+                <input-cell v-for="(header, i) in headers" :key="i" :data="item" :editable="header.editable" :rowKey="header.value" :type="header.type" :editState="item.editState"/>
+                <td>
+                    <v-icon small class="mr-2" @click="clickEdit(key)">
+                        edit
+                    </v-icon>
+                    <v-icon small @click="deleteRow(item)">
+                        delete
+                    </v-icon>
+                </td>
+            </tr>
+        </tbody>
+    </v-simple-table>
 </template>
 <script>
-export default {
-    props:{
-        headers:{
-            type:Array
+import inputCell from './table/inputCell.vue';
+    export default {
+        components:{
+            inputCell
         },
-        itemData:{
-            type:Array
-        }
-    },
-    methods: {
-        parseColValue(colData,key){
-            const keys = key.split('.');
-            let o = colData;
-            for (const k of keys) {
-                o = o[k];
+        props: {
+            headers: {
+                type: Array
+            },
+            itemData: {
+                type: Array
             }
-            return o
-        }
-    },
-}
+        },
+        methods: {
+            clickEdit(key){
+              this.$set(this.itemData[key],'editState',true);
+              console.log(this.itemData[key]);
+              
+            }
+        },
+    }
+
 </script>
