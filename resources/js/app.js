@@ -30,6 +30,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const publicPath = ['/login','/register','/'];
+  document.title = to.meta.title
   if(!store.getters.hasToken){
     
      if(publicPath.indexOf(window.location.pathname)<0){
