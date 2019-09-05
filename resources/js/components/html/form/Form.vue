@@ -23,17 +23,12 @@
                         <v-flex lg4 xs12 px-3 v-for="(group, g) in ['left','center','right']" :key="g">
                             <template v-if="formDefinition[group]">
                                 <div v-for="(item,i) in formDefinition[group]" :key="i">
-                                    <v-text-field v-show="editMode && !item.readOnly" :label="item.label" v-model="data[item.model]"
-                                        required>
-                                    </v-text-field>
-                                    <v-layout row px-3 wrap v-show="!editMode || item.readOnly">
-                                        <v-flex xs3>
-                                            <label for="">{{ item.label }}</label>
-                                        </v-flex>
-                                        <v-flex xs9>
-                                            <label for="">{{ data[item.model] }}</label>
-                                        </v-flex>
-                                    </v-layout>
+                                    <input-form 
+                                    :readOnly="item.readOnly"
+                                    :editMode="editMode"
+                                    v-model="data[item.model]"
+                                    :label="item.label"
+                                    />
                                 </div>
                             </template>
                         </v-flex>
@@ -61,10 +56,14 @@
     } from "vuex";
     import winkelSimpleTable from '../simpleTable';
     import popupForm from './popupForm.vue';
+    import imageForm from './imageForm.vue';
+    import inputForm from './inputForm.vue';
     export default {
         components: {
             winkelSimpleTable,
-            popupForm
+            popupForm,
+            imageForm,
+            inputForm
         },
         props:{
             formDefinition:{
