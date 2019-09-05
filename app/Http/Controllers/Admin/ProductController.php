@@ -22,4 +22,12 @@ class ProductController extends ResourceController
         $data->where('store_id','=',$request->header('Active-Store'));
         return $data;
     }
+    protected function prepareShowData(Request $request, $id){
+        $data = $this->model::with('images')->find($id);
+        $data->mainImage = null;
+        if(count($data->images)>0){
+            $data->mainImage = '/uploads/images'.$data->images[0]->name;
+        }
+        return $data;
+    }
 }

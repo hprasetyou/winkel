@@ -20,15 +20,14 @@
             <v-card>
                 <v-card-text>
                     <v-layout row wrap>
-                        <v-flex lg4 xs12 px-3 v-for="(group, g) in ['left','center','right']" :key="g">
+                        <v-flex lg4 mb-5 xs12 px-3 v-for="(group, g) in ['left','center','right']" :key="g">
                             <template v-if="formDefinition[group]">
                                 <div v-for="(item,i) in formDefinition[group]" :key="i">
-                                    <input-form 
+                                    <component :is="`${item.type}Form`"
                                     :readOnly="item.readOnly"
                                     :editMode="editMode"
                                     v-model="data[item.model]"
-                                    :label="item.label"
-                                    />
+                                    :label="item.label"></component>
                                 </div>
                             </template>
                         </v-flex>

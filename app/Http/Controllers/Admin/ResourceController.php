@@ -114,6 +114,7 @@ class ResourceController extends Controller
     {
         $data = $this->prepareStoreData($request, (int)$id);
         $data->save();
+        $data = $this->prepareShowData($request, $id);
         return $data->toJson(JSON_PRETTY_PRINT);
     }
 
