@@ -1,21 +1,16 @@
 <template>
     <div>
-        <v-data-table :hide-default-footer="hideAction" v-model="selected" show-select :headers="tableHeader" :items="tableData" :options.sync="pagination"
-        :footer-props="{'items-per-page-options':[15,30,50]}"
+        <v-data-table :hide-default-footer="hideAction" :headers="tableHeader" :items="tableData" :options.sync="pagination"
+        :footer-props="footerProps"
+        :items-per-page="footerProps.itemsPerPageOptions[0]"
             :server-items-length="totalItem" :loading="loading" class="elevation-1">
                 <template v-slot:item.action="{ item }">
-                    <v-icon
+                    <v-icon v-for="action in actions" :key="action.name"
                         small
                         class="mr-2"
-                        @click="editRow(item)"
+                        @click="rowAction(action.name,item)"
                     >
-                        edit
-                    </v-icon>
-                    <v-icon
-                        small
-                        @click="deleteRow(item)"
-                    >
-                        delete
+                        {{action.icon}}
                     </v-icon>
                 </template>
         </v-data-table>
@@ -39,16 +34,34 @@
             itemData: {
                 type: Array,
                 default: ()=>[]
+            },
+            filterData:{
+                type: Array,
+                default: ()=>[]
+            },
+            actions:{
+
+                type: Array,
+                default: ()=>[{
+                    name:'edit',
+                    icon:'edit'
+                },{
+                    name:'delete',
+                    icon:'delete'
+                }]
             }
         },
         data() {
             return {
-                selected: [],
                 rowsPerPage: 10,
                 pagination: {},
                 totalItem: 0,
                 loading: true,
-                tableData:[]
+                tableData:[],
+                footerProps:{    
+                    itemsPerPageOptions:[15,30,50]
+                }
+                
             }
         },
         watch: {
@@ -64,6 +77,12 @@
                 }
             },
             dataUrl: {
+                handler() {
+                    this.getData()
+                },
+                deep: true
+            },
+            filterData: {
                 handler() {
                     this.getData()
                 },
@@ -84,16 +103,12 @@
                 if(!actionHeader.length>0){
                     header.push({ text: 'Actions', value: 'action', sortable: false })
                 }
-                console.log(header);
                 return header;
             }
         },
         methods: {
-            editRow(data){
-                this.$emit('editRow',data)
-            },
-            deleteRow(data){
-                this.$emit('deleteRow',data)
+            rowAction(action,data){
+                this.$emit(`${action}Row`,data)
             },
             parseColValue(colData,key){
                 const keys = key.split('.');
@@ -108,21 +123,31 @@
                 return new Promise((resolve, reject) => {
                     const {
                         sortBy,
-                        descending,
+                        sortDesc,
                         page,
                         rowsPerPage
-                    } = this.pagination
-
-                    this.axios.get(this.dataUrl, {
-                            params: {
+                    } = this.pagination;
+                    
+                    const params = {
                                 page: page,
                                 perpage: rowsPerPage,
                                 sortby: sortBy,
-                                descending
-                            }
+                                sortDesc,
+                                filter:[],
+                                filterValue:[],
+                                filterOperator:[]
+                    }
+                    const filterData = this.filterData;
+
+                    for (let i = 0; i < filterData.length; i++) {
+                        params.filter[i] = filterData[i].column.name;
+                        params.filterValue[i] = filterData[i].value;
+                        params.filterOperator[i] = filterData[i].operator;
+                    }
+                    this.axios.get(this.dataUrl, {
+                            params
                         })
                         .then(response => {
-                            // handle success
                             this.loading = false;
                             resolve({
                                 items: response.data.data,
@@ -138,7 +163,7 @@
                         .then(data => {
                             this.tableData = data.items
                             this.totalItem = data.total
-                        })
+                        });
                 }else{
                     this.loading = false;
                 }

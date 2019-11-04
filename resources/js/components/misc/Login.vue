@@ -1,14 +1,20 @@
 <template>
     <v-card>
+        <v-toolbar color="teal" dark flat>
+            <v-toolbar-title>Login form</v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
             <v-form lazy-validation @submit="doLogin">
                 <v-text-field v-model="credential.username" label="E-mail" required></v-text-field>
-                <v-text-field v-model="credential.password" type="password" class="input-group--focused"></v-text-field>
-                <v-btn @click="doLogin" color="success">
-                    Login
-                </v-btn>
+                <v-text-field v-model="credential.password" label="Password" type="password"
+                    class="input-group--focused"></v-text-field>
             </v-form>
         </v-card-text>
+
+        <v-card-actions>
+            <div class="flex-grow-1"></div>
+            <v-btn @click="doLogin" color="teal">Login</v-btn>
+        </v-card-actions>
     </v-card>
 </template>
 <script>

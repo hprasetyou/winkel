@@ -9,11 +9,15 @@
                 </v-btn>
                 <v-btn color="error" v-if="!isNew" @click="deleteConfirmation">
                     Delete
+                    <v-icon dark right>delete</v-icon>
                 </v-btn>
-                <v-btn color="primary" @click="editMode = !editMode">{{ editMode?'Cancel':'Edit' }}</v-btn>
+                <v-btn color="primary" @click="editMode = !editMode">{{ editMode?'Cancel':'Edit' }}
+                    <v-icon dark right>{{ editMode?'cancel':'edit' }}</v-icon></v-btn>
                 <v-btn color="success" @click="saveData" v-if="editMode">
                     Save
+                    <v-icon dark right>check</v-icon>
                 </v-btn>
+                <slot name="additional-actions"></slot>
             </v-layout>
             <v-divider></v-divider>
             <br>
@@ -24,9 +28,14 @@
                             <template v-if="formDefinition[group]">
                                 <div v-for="(item,i) in formDefinition[group]" :key="i">
                                     <component :is="`${item.type}Form`"
+                                    :items="item.items"
                                     :readOnly="item.readOnly"
                                     :editMode="editMode"
+                                    :objUrl="item.objUrl"
+                                    :itemImage="item.itemImage"
                                     v-model="data[item.model]"
+                                    :disableAdd="item.disableAdd"
+                                    :propToShow="item.propToShow"
                                     :label="item.label"></component>
                                 </div>
                             </template>
@@ -54,15 +63,23 @@
         mapMutations
     } from "vuex";
     import winkelSimpleTable from '../simpleTable';
+    import selectForm from './selectForm.vue';
     import popupForm from './popupForm.vue';
     import imageForm from './imageForm.vue';
     import inputForm from './inputForm.vue';
+    import one2manyForm from './one2manyForm.vue';
+    import textareaForm from './textareaForm.vue';
+    import dateForm from './dateForm.vue';
     export default {
         components: {
             winkelSimpleTable,
             popupForm,
             imageForm,
-            inputForm
+            inputForm,
+            textareaForm,
+            selectForm,
+            one2manyForm,
+            dateForm
         },
         props:{
             formDefinition:{
@@ -134,13 +151,14 @@
                     this.data = response.data;
                     this.openSnackbar({
                         text: "All changes saved!",
-                        color: "success"
-                    })
+                        color: "green"
+                    });
                     this.editMode = false;
                     if (this.isNew) {
                         this.isNew = false;
                         this.$router.push(`${this.baseUrl}/${response.data.id}`)
                     }
+                    this.$emit('data-updated',response.data)
                 }).catch(err => {
                     this.openSnackbar({
                         text: "An error has occured",
@@ -161,7 +179,7 @@
                         this.$router.push(this.baseUrl);
                         this.openSnackbar({
                             text: "Data has been deleted!",
-                            color: "success"
+                            color: "green"
                         })
                     })
             },

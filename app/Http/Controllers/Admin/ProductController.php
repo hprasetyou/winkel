@@ -17,6 +17,11 @@ class ProductController extends ResourceController
         $data->store_id = $request->header('Active-Store');
         return $data;
     }
+    protected function afterStoreData(Request $request, $data, $id = null){
+        $formData = json_decode($request->getContent(), true);
+        
+
+    }
     protected function prepareData(Request $request){
         $data = $this->model::with('prices');
         $data->where('store_id','=',$request->header('Active-Store'));

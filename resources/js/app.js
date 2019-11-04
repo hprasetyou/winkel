@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
@@ -8,15 +9,37 @@ import { store } from './store/store'
 import wkSnackbar from './components/html/utils/winkelSnackbar.vue';
 import VuetifyConfirm from 'vuetify-confirm';
 import apiService from './apiService';
-import VueAxios from 'vue-axios'
+import VueAxios from 'vue-axios';
+import VueMoment from 'vue-moment';
 
+const vuetifyOptions = {
+  defaultAssets: {
+    font: true,
+    icons: 'md'
+  },
+  icons: {
+    iconfont: 'md',
+  }
+ }
+const vuetify = new Vuetify(vuetifyOptions);
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
-Vue.use(VuetifyConfirm);
+
+
+Vue.use(VueMoment);
+Vue.use(VuetifyConfirm, {
+  vuetify,
+  buttonTrueText: 'Confirm',
+  buttonFalseText: 'Cancel',
+  color: 'warning',
+  icon: 'warning',
+  title: 'Warning',
+  width: 350,
+  property: '$confirm'
+})
 const mApiService = new apiService();
 Vue.use(VueAxios, mApiService)
-const vuetifyOptions = { }
 
 Vue.component(
   'login-form',
@@ -49,7 +72,7 @@ const app = new Vue({
     el: '#app',
     router,
     store,
-    vuetify: new Vuetify(vuetifyOptions),
+    vuetify,
     data() {
         return {
             message: 'Hello',
