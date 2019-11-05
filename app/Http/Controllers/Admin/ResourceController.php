@@ -89,31 +89,41 @@ class ResourceController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $data = $this->prepareStoreData($request);
-        $data->save();
-        $this->afterStoreData($request, $data);
-        return $data->toJson(JSON_PRETTY_PRINT);
+        $data = $this->save($request);
+        return $this->show($request, $data->id);
     }
     
-    protected function afterStoreData(Request $request, $data, $id = null){
-
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $data = $this->save($request, (int)$id);
+        return $this->show($request, $data->id);
     }
+
+  
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    protected function save(Request $request, $id = null)
+    {
+        $data = $this->prepareStoreData($request, $id);
+        $data->save();
+        return $data;
+    }  
 
     /**
      * Prepare data before submit
@@ -137,7 +147,11 @@ class ResourceController extends Controller
     }
 
     protected function prepareShowData(Request $request, $id){
-        return $this->model::find($id);
+        $data = $this->model;
+        if($this->with){
+            $data = $data::with($this->with);
+        }
+        return $data::find($id);
     }
 
     /**
@@ -151,31 +165,6 @@ class ResourceController extends Controller
         return $data->toJson(JSON_PRETTY_PRINT);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Store  $store
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Store $store)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $data = $this->prepareStoreData($request, (int)$id);
-        $data->save();
-        $this->afterStoreData($request, $data, $id);
-        $data = $this->prepareShowData($request, $id);
-        return $data->toJson(JSON_PRETTY_PRINT);
-    }
 
     /**
      * Remove the specified resource from storage.

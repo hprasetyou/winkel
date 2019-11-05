@@ -9,9 +9,9 @@ class Product extends Model
     /**
      * Get all of the owning product models.
      */
-    public function store()
+    public function company()
     {
-        return $this->belongsTo('\App\Store');
+        return $this->belongsTo('\App\Company');
     }
 
     public function prices(){
@@ -22,4 +22,8 @@ class Product extends Model
         return $this->hasMany('\App\ProductImage');
     }
 
+    public function parentProduct(){
+        return $this->belongsTo('\App\Product','parent_id');
+    }
+    
 }

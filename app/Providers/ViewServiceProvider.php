@@ -38,10 +38,7 @@ class ViewServiceProvider extends ServiceProvider
                 ['name'=>'Products',
                 'url'=>'/products',
                 'icon'=>'account_circle']]
-            ],
-            ['name'=>'Store',
-            'url'=>'/store',
-            'icon'=>'account_circle']
+            ]
         ];
         View::share('foo', json_encode($menu));
     }
