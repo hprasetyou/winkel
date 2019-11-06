@@ -1,32 +1,43 @@
 <template>
     <td>
-        <template  v-if="editState && conf.editable && conf.type != 'method'">
-            <v-text-field  v-if="conf.type == 'number'" type="number" v-model="data[conf.value]" />
-            <v-text-field  v-else v-model="data[conf.value]" />
+        <template v-if="item.type == 'method'">
+            <div>
+                {{ item.value(data) }}
+            </div>
         </template>
-        <span v-if="!editState || !conf.editable">
-            <template v-if="conf.type == 'method'">
-                {{ conf.value(data) }}
-            </template>
-            <template v-else>
-                {{ parseColValue(data,conf.value) }}
-            </template>
-        </span>
+        <template v-else>
+            <component 
+            :is="`${item.type}Form`" 
+            :items="item.items" 
+            :readOnly="item.readOnly" 
+            :editMode="editState"
+            :objUrl="item.objUrl" 
+            :itemImage="item.itemImage" 
+            v-model="data[item.model]" 
+            :hideLabel="true"
+            :disableAdd="item.disableAdd"
+            :propToShow="item.propToShow" :label="item.label"></component>
+        </template>
+
     </td>
 </template>
 <script>
+    import selectForm from '../form/selectForm.vue';
+    import imageForm from '../form/imageForm.vue';
+    import inputForm from '../form/inputForm.vue';
+    import one2manyForm from '../form/one2manyForm.vue';
+    import textareaForm from '../form/textareaForm.vue';
+    import dateForm from '../form/dateForm.vue';
     export default {
-        props: ['conf.value', 'data', 'editState','conf'],
-        methods: {
-            parseColValue(colData, key) {
-                const keys = key.split('.');
-                let o = colData;
-                for (const k of keys) {
-                    o = o[k];
-                }
-                return o
-            },
+        components: {
+            imageForm,
+            inputForm,
+            textareaForm,
+            selectForm,
+            one2manyForm,
+            dateForm
         },
+        props: ['item.value','parentEditMode', 'data', 'editState', 'item'],
     }
 
 </script>

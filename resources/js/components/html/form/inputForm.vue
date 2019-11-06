@@ -2,7 +2,7 @@
     <div>
         <v-text-field v-show="editMode && !readOnly" :label="label" v-model="inputVal" required>
         </v-text-field>
-        <value-form :label="label" :value="value" v-show="!editMode || readOnly" />
+        <value-form :hideLabel="hideLabel" :label="label" :value="value" v-show="!editMode || readOnly" />
     </div>
 </template>
 <script>
@@ -20,6 +20,10 @@ export default {
             type:Boolean,
             default:false
         },
+        hideLabel:{
+            type:Boolean,
+            default:false
+        },
         value:{},
         label:{
             type:String
@@ -31,8 +35,11 @@ export default {
         }
     },
     watch:{
-        value(){
-            this.inputVal = this.value;
+        value:{
+            immediate: true,
+            handler(newVal, oldVal) {
+                    this.inputVal = this.value;
+            }
         },
         inputVal(){
             // this.value = this.inputVal;

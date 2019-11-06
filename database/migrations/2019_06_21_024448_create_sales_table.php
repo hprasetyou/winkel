@@ -17,7 +17,7 @@ class CreateSalesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->bigInteger('company_id');
-            $table->bigInteger('total');
+            $table->bigInteger('total')->default(0);
             $table->timestamps();
         });
     }

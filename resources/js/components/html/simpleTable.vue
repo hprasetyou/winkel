@@ -2,13 +2,13 @@
     <v-simple-table>
         <thead>
             <tr>
-                <th v-for="(header, i) in headers" :key="i" class="text-left">{{header.text}}</th>
+                <th v-for="(header, i) in headers" :key="i" class="text-left">{{header.label}}</th>
                 <th v-if="editState">Action</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(item,key) in itemData" :key="item.id">
-                <input-cell v-for="(header, i) in headers" :key="i" :data="item" :conf="header" :editState="item.editState"/>
+                <input-cell v-for="(header, i) in headers" :key="i" :data="item" :item="header" :parentEditMode="editState" :editState="item.editState"/>
                 <td v-if="editState">
                     <v-icon small class="mr-2" @click="clickEdit(key)">
                         edit
@@ -43,7 +43,7 @@ import inputCell from './table/inputCell.vue';
             clickEdit(key){
               this.$set(this.itemData[key],'editState',!this.itemData[key].editState);              
             }
-        },
+        }
     }
 
 </script>

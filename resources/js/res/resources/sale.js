@@ -1,3 +1,4 @@
+import apiService from '../../apiService';
 export default {
     title:'Sale',
     header:[{
@@ -31,18 +32,31 @@ export default {
                 label:'Items',
                 model:'sales_items',
                 header:[{
-                    text: 'Product',
-                    value: 'product.name',
+                    label: 'Product',
+                    model: 'product_id',
+                    type:'one2many',
+                    objUrl:'product',
+                    disableAdd:true
                 },{
-                    text: 'Price',
-                    value: 'item_price'
+                    label: 'Price',
+                    type: 'method',
+                    value: (item)=> {
+                        const api = new apiService();
+                        if(item.product.id != item.product_id){
+                            api.get(`/api/product/${item.product_id}`).then(res=>{
+                                item.product = res.data
+                                item.item_price = res.data.price  
+                            })
+                        }
+                        return item.item_price
+                    },
                 },{
-                    text: 'Qty',
-                    value: 'qty',
-                    type: 'number',
+                    label: 'Qty',
+                    model: 'qty',
+                    type: 'input',
                     editable: true
                 },{
-                    text: 'Total',
+                    label: 'Total',
                     type: 'method',
                     value: (item)=> item.total = item.qty * item.item_price,
                 }],

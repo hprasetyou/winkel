@@ -21,6 +21,8 @@ class ProductController extends ResourceController
         $data->company_id = $user->company_id;
         return $data;
     }
+
+
     protected function save(Request $request, $id = null){
         $data = parent::save($request, $id);
         $formData = json_decode($request->getContent(), false);
@@ -36,12 +38,16 @@ class ProductController extends ResourceController
         }
         return $data;
     }
+
+
     protected function prepareData(Request $request){
         $data = parent::prepareData($request);
         $user = request()->user();
         $data->where('company_id','=', $user->company_id);
         return $data;
     }
+
+    
     protected function prepareShowData(Request $request, $id){
         $data = $this->model::with(['images','prices','parentProduct'])->find($id);
         $data->mainImage = null;

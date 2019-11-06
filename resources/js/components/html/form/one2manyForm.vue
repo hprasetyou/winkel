@@ -21,7 +21,7 @@
             </v-autocomplete>
         </v-layout>
         <div v-show="!editMode || readOnly">
-            <value-form :label="label" :value="getItemValue(value)" v-show="!editMode || readOnly" />
+            <value-form :hideLabel="hideLabel" :label="label" :value="getItemValue(value)" v-show="!editMode || readOnly" />
 
             <v-layout row v-if="itemImage && itemData"><v-col
                     md="9"
@@ -42,6 +42,10 @@ export default {
             disableAdd:{
                 type: Boolean,
                 default: false
+            },
+            hideLabel:{
+                type:Boolean,
+                default:false
             },
             propToShow:{
                 type: String,
@@ -157,14 +161,16 @@ export default {
             }
         },
         watch:{
-            value(){
-                this.inputVal = this.value;
-                this.inputVal = this.value;
-                const exist = this.items.find(item=>item.value == this.value);
-                if(!exist){
-                    this.getData(this.value,true)
+            value:{
+                immediate: true,
+                handler(newVal, oldVal) {
+                    this.inputVal = this.value;
+                    this.inputVal = this.value;
+                    const exist = this.items.find(item=>item.value == this.value);
+                    if(!exist){
+                        this.getData(this.value,true)
+                    }
                 }
-                
             },
             inputVal(){
                 // this.value = this.inputVal;
