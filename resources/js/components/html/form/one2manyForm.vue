@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-layout v-show="editMode && !readOnly">
-            <v-autocomplete v-model="inputVal" :search-input.sync="search" :items="items" :label="label"
+            <v-autocomplete @change="onChange" v-model="inputVal" :search-input.sync="search" :items="items" :label="label"
                 item-text="text" item-value="value" @keyup="searchData">
                 <template v-if="!disableAdd" v-slot:append-item>
                     <v-layout px-4>
@@ -114,6 +114,13 @@ export default {
                     }
                 }
                 return out;
+            },
+            onChange(){
+                let value = false;
+                if(this.inputVal){
+                    value = this.entries.find(item => item.id == this.inputVal)
+                }
+                this.$emit('valChange',value);
             },
             getData(s,byId = false) {
                 let params = '';

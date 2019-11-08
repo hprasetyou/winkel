@@ -47,7 +47,10 @@
             <v-card  v-for="(child, i) in formDefinition.child" :key="i">
                 <v-card-title row>
                     <span>{{ child.label }}</span>
-                        <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
+                    <v-btn color="" @click="data[child.model].push({})">
+                        Add
+                    </v-btn>
                 </v-card-title>
                 <popupForm :dialog="child.dialog" />
                 <v-divider></v-divider>

@@ -36,29 +36,32 @@ export default {
                     model: 'product_id',
                     type:'one2many',
                     objUrl:'product',
+                    onChange:(val,item)=>{
+                        item.product = val;
+                        item.item_price = val.price;
+                    },
                     disableAdd:true
                 },{
                     label: 'Price',
                     type: 'method',
-                    value: (item)=> {
-                        const api = new apiService();
-                        if(item.product.id != item.product_id){
-                            api.get(`/api/product/${item.product_id}`).then(res=>{
-                                item.product = res.data
-                                item.item_price = res.data.price  
-                            })
-                        }
+                    reference:['product_id'],
+                    value: (refVal,item)=> {                                                
                         return item.item_price
                     },
                 },{
                     label: 'Qty',
                     model: 'qty',
                     type: 'input',
-                    editable: true
+                    editable: true,
+                    default:1
                 },{
                     label: 'Total',
                     type: 'method',
-                    value: (item)=> item.total = item.qty * item.item_price,
+                    reference:['product_id','qty'],
+                    value: (refVal,item)=>{
+                        item.total = item.qty * item.item_price
+                        return !isNaN(item.total)? item.total:0;
+                    },
                 }],
             }
         ]
